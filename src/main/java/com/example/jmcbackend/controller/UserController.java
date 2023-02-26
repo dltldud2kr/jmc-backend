@@ -17,16 +17,20 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody UserJoinRequest dto) {
-        userService.join(dto.getUserName(), dto.getPassword());
-        return ResponseEntity.ok().body("회원가입이 성공했습니다.");
-    }
+//    @PostMapping("/join")
+//    public ResponseEntity<String> join(@RequestBody UserJoinRequest dto) {
+//        userService.join(dto.getUserName(), dto.getPassword());
+//        return ResponseEntity.ok().body("회원가입이 성공했습니다.");
+//    }
+
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody UserLoginRequest dto) {
+//        String token = userService.login(dto.getUserName(), dto.getPassword());
+//        return ResponseEntity.ok().body(token);
+//    }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginRequest dto) {
-        String token = userService.login(dto.getUserName(), dto.getPassword());
-        return ResponseEntity.ok().body(token);
-
+    public ResponseEntity<String> login() {
+        return ResponseEntity.ok().body(userService.login("", ""));
     }
 }
