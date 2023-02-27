@@ -1,7 +1,7 @@
 package com.example.jmcbackend.controller;
 
-import com.example.jmcbackend.service.UserService;
-import com.example.jmcbackend.domain.dto.UserJoinRequest;
+import com.example.jmcbackend.member.service.UserServiceImpl;
+import com.example.jmcbackend.member.dto.UserJoinRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ class UserControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Autowired
     ObjectMapper objectMapper;

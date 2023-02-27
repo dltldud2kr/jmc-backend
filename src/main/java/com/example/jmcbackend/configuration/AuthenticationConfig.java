@@ -1,7 +1,7 @@
 package com.example.jmcbackend.configuration;
 
 
-import com.example.jmcbackend.service.UserService;
+import com.example.jmcbackend.member.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class AuthenticationConfig {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -29,14 +29,13 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-//                .antMatchers("/api/**").permitAll()
                 .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 사용하는 경우 씀
                 .and()
-                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(userServiceImpl, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }
