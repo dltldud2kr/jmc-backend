@@ -10,10 +10,13 @@ import com.example.jmcbackend.member.repository.UserRepository;
 import com.example.jmcbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,34 +29,34 @@ public class UserServiceImpl implements UserService{
     private String secretKey;
     private Long expiredTimeMs = 1000 * 60 * 60l;   // 1시간
 
-    public UserDto join(UserJoinRequest dto) {
+    public ResponseEntity join(UserJoinRequest dto) {
 
-        // userName 중복 check
-        userRepository.findById(dto.getUserId())
-                .ifPresent(user -> {
-                    throw new AppException(ErrorCode.USERNAME_DUPLICATED , dto.getUserId() + "는 이미 있습니다.");
-//                    throw new RuntimeException(dto.getUserId() + "는 이미 있습니다.");
-                });
+//        // userName 중복 check
+//        userRepository.findById(dto.getUserId())
+//                .ifPresent(user -> {
+//                    throw new AppException(ErrorCode.USERNAME_DUPLICATED , dto.getUserId() + "는 이미 있습니다.");
+////                    throw new RuntimeException(dto.getUserId() + "는 이미 있습니다.");
+//                });
 
-        // 저장
-        User user = User.builder()
-                .userId(dto.getUserId())
-                .userName(dto.getUserName())
-                .userNickname(dto.getUserNickname())
-                .regDt(LocalDateTime.now())
-                .password(encoder.encode(dto.getPassword()))
-                .build();
-        userRepository.save(user);
 
-        // 반환
-        UserDto userDto = UserDto.builder()
-                .userId(user.getUserId())
-                .userName(user.getUserName())
-                .userNickname(user.getUserNickname())
-                .regDt(user.getRegDt())
-                .build();
+        Optional<User> byId = userRepository.findById(dto.getUserId());
 
-        return userDto;
+        //계정이 존재할 경우:
+        if(byId.isPresent()) {
+            throw new IllegalStateException("exist");
+        } else {
+            // 저장
+            User user = User.builder()
+                    .userId(dto.getUserId())
+                    .userName(dto.getUserName())
+                    .userNickname(dto.getUserNickname())
+                    .regDt(LocalDateTime.now())
+                    .password(encoder.encode(dto.getPassword()))
+                    .build();
+            userRepository.save(user);
+            return ResponseEntity.ok().body(null);
+        }
+
     }
 
     public String login(UserLoginRequest dto){
