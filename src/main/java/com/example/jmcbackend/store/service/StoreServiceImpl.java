@@ -32,7 +32,7 @@ public class StoreServiceImpl implements StoreService {
                     .storeUrl(parameter.getStoreUrl())
                     .storePhone(parameter.getStorePhone())
                     .storeCategory(parameter.getStoreCategory())
-                    .storeLikeCount(parameter.getStoreLikeCount())
+                    .storeLikeCount(parameter.getStoreLikeCount())  //이 부분은 0으로 시작해야함.
                     .storeReviewCount(parameter.getStoreReviewCount())
                     .storeCreated(LocalDateTime.now())
                     .build();

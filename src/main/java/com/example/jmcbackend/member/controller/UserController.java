@@ -1,6 +1,7 @@
 package com.example.jmcbackend.member.controller;
 
 import com.example.jmcbackend.exception.AppException;
+import com.example.jmcbackend.exception.ErrorCode;
 import com.example.jmcbackend.member.dto.UserDto;
 import com.example.jmcbackend.member.dto.UserJoinRequest;
 import com.example.jmcbackend.member.dto.UserLoginRequest;
@@ -31,7 +32,7 @@ public class UserController {
             return userServiceImpl.join(dto);
         } catch (IllegalStateException ex) {
             if(ex.getMessage().equals("exist")){
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
+                throw new AppException(ErrorCode.USERNAME_DUPLICATED , dto.getUserId() + "는 이미 있습니다.");
             }
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

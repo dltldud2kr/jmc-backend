@@ -1,6 +1,7 @@
 package com.example.jmcbackend.store.entity;
 
 import com.example.jmcbackend.category.entity.Category;
+import com.example.jmcbackend.storeLike.entity.StoreLike;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -31,11 +34,12 @@ public class Store {
     private Long storeLikeCount;
     private Long storeReviewCount;
 
-    private Long categoryId;        //??
-
     private String storePhone;
     private String storeAddress;
     private String storeUrl;
+
+//    @OneToMany(mappedBy = "store")
+//    private List<StoreLike> storeLikes = new ArrayList<>();
 
     private String storeOpeningDateAndHours;    //
     private String storeInfo;

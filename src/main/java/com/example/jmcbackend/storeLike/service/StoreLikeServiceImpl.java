@@ -26,19 +26,19 @@ public class StoreLikeServiceImpl implements StoreLikeService {
     @Override
     public StoreLike add( String userId, Long storeId) {
 
-//        Optional<Store> optionalStoreId = storeRepository.findById(storeId);
-//
-//        if(!optionalStoreId.isPresent()) {
-//            throw new IllegalStateException("가게가 존재하지 않습니다.");
-//        } else {
-//            StoreLike storeLike = StoreLike.builder()
-//                    .store(new Store(storeId))
-//                    .user(new User(userId))
-//                    .build();
-//            storeLikeRepository.save(storeLike);
-//
-//            return storeLike;
-        return null;
+        Optional<Store> optionalStoreId = storeRepository.findById(storeId);
+
+        if (!optionalStoreId.isPresent()) {
+            throw new IllegalStateException("가게가 존재하지 않습니다.");
+        } else {
+            StoreLike storeLike = StoreLike.builder()
+                    .storeId(storeId)
+                    .userId(userId)
+                    .build();
+            storeLikeRepository.save(storeLike);
+
+            return storeLike;
         }
+    }
 
 }

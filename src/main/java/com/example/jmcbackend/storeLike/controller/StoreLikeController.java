@@ -18,19 +18,16 @@ public class StoreLikeController {
 
     private final StoreLikeService storeLikeService;
 
-    @PostMapping("/add/{store}")
-    public ResponseEntity add(   Principal principal ,@PathVariable("store") Long storeId) {
+    @PostMapping("/add/storeId/{store}")
+    public ResponseEntity add(Principal principal ,@PathVariable("store") Long storeId) {
 
         String userId = principal.getName();
-            StoreLike result = storeLikeService.add(userId, storeId);
+        StoreLike result = storeLikeService.add(userId, storeId);
 
 
         return ResponseEntity.ok(result);
 
     }
 
-    @PostMapping("/{test}")
-    public ResponseEntity tests (@PathVariable("test") String test){
-        return ResponseEntity.ok(test);
-    }
+
 }
