@@ -29,7 +29,7 @@ public class Store {
 //    @JoinColumn(name="category_id")
 //    private Category category;
 
-    private Long storeCategory;
+    private Long categoryId;
 
     private Long storeLikeCount;
     private Long storeReviewCount;
