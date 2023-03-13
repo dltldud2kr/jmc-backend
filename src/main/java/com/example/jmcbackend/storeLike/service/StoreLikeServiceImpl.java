@@ -21,7 +21,7 @@ public class StoreLikeServiceImpl implements StoreLikeService {
 
     /**
      *  좋아요를 한 번 더 눌렀을 때 비활성화되게 설정하기
-     *  일단 외래키 2개로 설정하고 값을 넣으니 storeId와 userId에 오류가 생김... 이유 모름 ㅠ
+
      */
     @Override
     public StoreLike add( String userId, Long storeId) {

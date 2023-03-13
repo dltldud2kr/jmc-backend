@@ -25,4 +25,13 @@ public class ReviewController {
 
         return ResponseEntity.ok(result);
     }
+
+    @DeleteMapping("/del/{reviewId}")
+    public ResponseEntity<Review> delReview(Principal principal, @PathVariable("reviewId") Long reviewId) {
+
+        String userId = principal.getName();
+        reviewService.del(reviewId,userId);
+
+        return ResponseEntity.ok(null);
+    }
 }

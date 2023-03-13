@@ -5,4 +5,6 @@ import com.example.jmcbackend.storeLike.entity.StoreLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StoreLikeRepository extends JpaRepository<StoreLike, Long> {
+
+    Long countByStoreId(Long storeId);
 }

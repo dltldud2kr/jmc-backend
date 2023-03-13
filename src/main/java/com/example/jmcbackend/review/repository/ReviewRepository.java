@@ -6,4 +6,8 @@ import com.example.jmcbackend.review.entity.Review;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+
+    Long countByStoreId(Long storeId);
+
+
 }

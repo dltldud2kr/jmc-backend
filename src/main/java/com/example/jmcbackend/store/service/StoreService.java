@@ -1,4 +1,5 @@
 package com.example.jmcbackend.store.service;
+import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
 import com.example.jmcbackend.store.entity.Store;
 import org.springframework.data.domain.Page;
@@ -19,4 +20,9 @@ public interface StoreService {
      */
 
     Page<Store> getAllStore (Pageable pageable);
+
+    /**
+     * 가게 관련 정보
+     */
+    StoreDto storeInfo(StoreInfoParam storeName);
 }

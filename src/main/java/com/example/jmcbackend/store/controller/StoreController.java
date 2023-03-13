@@ -1,5 +1,6 @@
 package com.example.jmcbackend.store.controller;
 
+import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
 import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.service.StoreService;
@@ -34,6 +35,14 @@ public class StoreController {
 
         Page<Store> stores =storeService.getAllStore(pageable);
         return ResponseEntity.ok(stores);
+    }
+
+    @PostMapping("/info")
+    public ResponseEntity findStore (@RequestBody StoreInfoParam storeName) {
+
+        StoreDto storeDto = storeService.storeInfo(storeName);
+
+        return ResponseEntity.ok(storeDto);
     }
 
 }

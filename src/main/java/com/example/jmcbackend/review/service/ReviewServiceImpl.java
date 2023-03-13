@@ -1,5 +1,6 @@
 package com.example.jmcbackend.review.service;
 
+import com.example.jmcbackend.exception.AppException;
 import com.example.jmcbackend.review.dto.ReviewDto;
 import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.repository.ReviewRepository;
@@ -38,4 +39,20 @@ public class ReviewServiceImpl implements ReviewService{
 
         return review;
     }
+
+    @Override
+    public ResponseEntity del(Long reviewId, String userId) {
+        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+        if(!optionalReview.isPresent()){
+            throw new IllegalStateException();
+        }
+
+        if(optionalReview.get().getUserId().equals(userId)) {
+            reviewRepository.deleteById(reviewId);
+        }
+
+        return ResponseEntity.ok().body(null);
+    }
+
+
 }

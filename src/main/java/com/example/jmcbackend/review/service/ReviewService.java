@@ -9,4 +9,6 @@ import org.springframework.stereotype.Service;
 public interface ReviewService {
 
     Review add(ReviewDto dto, String userId, Long storeId);
+
+    ResponseEntity del (Long reviewId, String userId);
 }

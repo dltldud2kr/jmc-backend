@@ -16,7 +16,6 @@ public class StoreInfoParam {
 
     private String storeName;
 
-    private Long storeCategory;     //?
     private Long storeLikeCount;
     private Long storeReviewCount;
 
