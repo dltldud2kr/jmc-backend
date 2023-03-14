@@ -9,6 +9,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/reviews")
@@ -26,12 +27,21 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/del/{reviewId}")
+    @PostMapping("/del/{reviewId}")
     public ResponseEntity<Review> delReview(Principal principal, @PathVariable("reviewId") Long reviewId) {
 
         String userId = principal.getName();
         reviewService.del(reviewId,userId);
 
         return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/myReviewList")
+    public ResponseEntity myReviewList(Principal principal) {
+        String userId = principal.getName();
+
+        List<Review> reviews = reviewService.myReviewList(userId);
+
+        return ResponseEntity.ok(reviews);
     }
 }

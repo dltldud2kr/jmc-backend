@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface StoreService {
 
@@ -19,10 +21,12 @@ public interface StoreService {
      * 매장 리스트
      */
 
-    Page<Store> getAllStore (Pageable pageable);
+    List<Store> getAllStore ();
 
     /**
      * 가게 관련 정보
      */
     StoreDto storeInfo(StoreInfoParam storeName);
+
+    List<Store> getCategoryStoreList(Long categoryId);
 }

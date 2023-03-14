@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,18 +41,29 @@ public class ReviewServiceImpl implements ReviewService{
         return review;
     }
 
+    /**
+     * 자신의 게시글에만 x(삭제) 표시가 뜨게끔 하려면 어떻게 해야할까?
+     */
     @Override
     public ResponseEntity del(Long reviewId, String userId) {
         Optional<Review> optionalReview = reviewRepository.findById(reviewId);
         if(!optionalReview.isPresent()){
-            throw new IllegalStateException();
+            throw new IllegalStateException("게시글이 존재하지 않습니다.");
         }
 
         if(optionalReview.get().getUserId().equals(userId)) {
             reviewRepository.deleteById(reviewId);
+        } else {
+            throw new IllegalStateException("자신의 게시글이 아닙니다.");
         }
 
         return ResponseEntity.ok().body(null);
+    }
+
+    @Override
+    public List<Review> myReviewList(String userId) {
+
+        return reviewRepository.findAllByUserId(userId);
     }
 
 

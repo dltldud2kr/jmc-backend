@@ -9,6 +9,7 @@ import com.example.jmcbackend.storeLike.repository.StoreLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +40,12 @@ public class StoreLikeServiceImpl implements StoreLikeService {
 
             return storeLike;
         }
+    }
+
+    @Override
+    public List<StoreLike> myLikeList(String userId) {
+
+        return storeLikeRepository.findAllByUserId(userId);
     }
 
 }

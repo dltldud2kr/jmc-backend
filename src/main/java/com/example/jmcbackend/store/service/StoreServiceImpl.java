@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,18 +52,16 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Page<Store> getAllStore(Pageable pageable) {
+    public List<Store> getAllStore() {
 
-        return storeRepository.findAll(pageable);
+        return storeRepository.findAll();
     }
 
     @Override
     public StoreDto storeInfo(StoreInfoParam storeName) {
 
         Store byStoreName = storeRepository.findByStoreName(storeName.getStoreName());
-        System.out.println("byStoreName:" + byStoreName);
-        if(byStoreName.equals("null")) {
-            System.out.println("존재하지않는 게물");
+        if(byStoreName == null) {
             throw new IllegalStateException("존재하지 않는 가게입니다.");
         }
         Optional<Store> optionalStore = storeRepository.findById(byStoreName.getStoreId());
@@ -85,5 +84,10 @@ public class StoreServiceImpl implements StoreService {
                 .storeOpeningDateAndHours(storeInfo.getStoreOpeningDateAndHours())
                 .build();
         return dto;
+    }
+
+    @Override
+    public List<Store> getCategoryStoreList(Long categoryId) {
+        return storeRepository.findAllByCategoryId(categoryId);
     }
 }
