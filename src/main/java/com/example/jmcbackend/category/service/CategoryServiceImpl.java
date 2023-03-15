@@ -3,16 +3,11 @@ package com.example.jmcbackend.category.service;
 import com.example.jmcbackend.category.dto.CategoryDto;
 import com.example.jmcbackend.category.entity.Category;
 import com.example.jmcbackend.category.repository.CategoryRepository;
-import com.example.jmcbackend.store.entity.Store;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.security.web.authentication.RequestMatcherDelegatingAuthenticationManagerResolver.builder;
 
 @Service
 @RequiredArgsConstructor

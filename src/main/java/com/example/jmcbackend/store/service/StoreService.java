@@ -8,17 +8,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public interface StoreService {
 
     /**
-     * 매장 등록
+     * 가게 등록
      */
     Store register(StoreInfoParam parameter, String userId);
 
     /**
-     * 매장 리스트
+     * 가게 삭제
+     */
+    void storeDelete(StoreInfoParam parameter);
+
+
+    /**
+     * 가게 리스트
      */
 
     List<Store> getAllStore ();
@@ -28,5 +35,24 @@ public interface StoreService {
      */
     StoreDto storeInfo(StoreInfoParam storeName);
 
+    /**
+     * 카테고리 리스트
+     */
+
     List<Store> getCategoryStoreList(Long categoryId);
+
+
+
+
+    /**
+     * 자동완성
+     * @param keyword
+     */
+//    void addAutoCompleteKeyword(String keyword);
+//
+//    List<String> autoComplete(String keyword);
+//
+//    void deleteAutoCompleteKeyword(String keyword);
+//
+//    void storeDelete(StoreInfoParam parameter);
 }

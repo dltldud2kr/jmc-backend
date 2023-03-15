@@ -1,8 +1,5 @@
 package com.example.jmcbackend.store.service;
 
-import com.example.jmcbackend.exception.AppException;
-import com.example.jmcbackend.exception.ErrorCode;
-import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
@@ -10,18 +7,19 @@ import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.repository.StoreRepository;
 import com.example.jmcbackend.storeLike.repository.StoreLikeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.apache.commons.collections4.Trie;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
 
+    private final Trie trie;
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
     private final StoreLikeRepository storeLikeRepository;
@@ -30,8 +28,12 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store register(StoreInfoParam parameter, String userId) {
 
+        Store byStoreName = storeRepository.findByStoreName(parameter.getStoreName());
+        if (byStoreName.getStoreName().equals(parameter.getStoreName())){
+            throw new IllegalStateException("존재하는 가게 명입니다.");
+        }
 
-            Store store = Store.builder()
+        Store store = Store.builder()
                     .storeName(parameter.getStoreName())
                     .userId(userId)
                     .storeInfo(parameter.getStoreInfo())
@@ -49,6 +51,18 @@ public class StoreServiceImpl implements StoreService {
 
 
         return store;
+    }
+
+    @Override
+    public void storeDelete(StoreInfoParam parameter) {
+
+        Optional<Store> store = storeRepository.findById(parameter.getStoreId());
+        if(store.isPresent()){
+            storeRepository.deleteById(parameter.getStoreId());
+        } else {
+            throw new IllegalStateException("가게 삭제 오류");
+        }
+
     }
 
     @Override
@@ -90,4 +104,19 @@ public class StoreServiceImpl implements StoreService {
     public List<Store> getCategoryStoreList(Long categoryId) {
         return storeRepository.findAllByCategoryId(categoryId);
     }
+
+//    public void addAutoCompleteKeyword(String keyword) {
+//        this.trie.put(keyword,null);
+//    }
+//
+//    public List<String> autoComplete(String keyword) {
+//        return (List<String>) this.trie.prefixMap(keyword).keySet()
+//                .stream().collect(Collectors.toList());
+//    }
+//
+//    public void deleteAutoCompleteKeyword(String keyword) {
+//        this.trie.remove(keyword);
+//    }
+
+
 }
