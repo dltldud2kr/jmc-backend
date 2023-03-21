@@ -26,6 +26,7 @@ public class StoreDto {
 
         private String storeOpeningDateAndHours;    //
         private String storeInfo;
+        private Float reviewAvg;
 
         private String userId;
 

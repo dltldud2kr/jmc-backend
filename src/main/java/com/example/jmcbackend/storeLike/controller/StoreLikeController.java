@@ -26,7 +26,7 @@ public class StoreLikeController {
     public ResponseEntity add(Principal principal ,@PathVariable("store") Long storeId) {
 
         String userId = principal.getName();
-        StoreLike result = storeLikeService.add(userId, storeId);
+        ResponseEntity result = storeLikeService.add(userId, storeId);
 
 
         return ResponseEntity.ok(result);

@@ -17,14 +17,9 @@ public class StoreLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name= "store_id")
-//    private Store store;
-//
-//    @ManyToOne
-//    @JoinColumn(name="user_id")
-//    private User user;
 
     private String userId;
     private Long storeId;
+
+    private Boolean isActive;
 }

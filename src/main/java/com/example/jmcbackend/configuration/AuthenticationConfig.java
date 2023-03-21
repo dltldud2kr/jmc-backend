@@ -29,8 +29,12 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
+                .antMatchers("/api/v1/users/join", "/api/v1/users/login"
+                ,"/store/**","/category/**").permitAll()
+
+
+                .antMatchers(HttpMethod.POST, "/store/register","/create/review"
+                ,"/category/add", "/store/delete","/api/v1/reviews/myReviewList").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 사용하는 경우 씀

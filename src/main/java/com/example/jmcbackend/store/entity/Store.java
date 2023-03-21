@@ -25,10 +25,6 @@ public class Store {
 
     private String storeName;
 
-//    @ManyToOne
-//    @JoinColumn(name="category_id")
-//    private Category category;
-
     private Long categoryId;
 
     private Long storeLikeCount;
@@ -38,8 +34,6 @@ public class Store {
     private String storeAddress;
     private String storeUrl;
 
-//    @OneToMany(mappedBy = "store")
-//    private List<StoreLike> storeLikes = new ArrayList<>();
 
     private String storeOpeningDateAndHours;    //
     private String storeInfo;

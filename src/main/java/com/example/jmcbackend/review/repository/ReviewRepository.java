@@ -1,6 +1,8 @@
 package com.example.jmcbackend.review.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.example.jmcbackend.review.entity.Review;
 
@@ -12,6 +14,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Long countByStoreId(Long storeId);
 
     List<Review> findAllByUserId(String userId);
+
+
+//    @Query(value = "select AVG(review_score) from review where review.store_id =:storename ")
+//    Long reviewScoreAvg(@Param("storename") Long storeId);
 
 
 }

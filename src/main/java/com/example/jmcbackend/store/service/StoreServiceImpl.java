@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
 
-    private final Trie trie;
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
     private final StoreLikeRepository storeLikeRepository;
@@ -28,8 +27,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Store register(StoreInfoParam parameter, String userId) {
 
-        Store byStoreName = storeRepository.findByStoreName(parameter.getStoreName());
-        if (byStoreName.getStoreName().equals(parameter.getStoreName())){
+        Optional<Store> byStoreName = storeRepository.findByStoreName(parameter.getStoreName());
+        if (byStoreName.isPresent()){
             throw new IllegalStateException("존재하는 가게 명입니다.");
         }
 
@@ -74,15 +73,18 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public StoreDto storeInfo(StoreInfoParam storeName) {
 
-        Store byStoreName = storeRepository.findByStoreName(storeName.getStoreName());
-        if(byStoreName == null) {
+        Optional<Store> byStoreName = storeRepository.findByStoreName(storeName.getStoreName());
+        if(!byStoreName.isPresent()) {
             throw new IllegalStateException("존재하지 않는 가게입니다.");
         }
-        Optional<Store> optionalStore = storeRepository.findById(byStoreName.getStoreId());
+        Optional<Store> optionalStore = storeRepository.findById(byStoreName.get().getStoreId());
 
         Store storeInfo = optionalStore.get();
         Long reviewCount = reviewRepository.countByStoreId(storeInfo.getStoreId());
         Long likeCount = storeLikeRepository.countByStoreId(storeInfo.getStoreId());
+
+//        Long reviewScoreAvg = reviewRepository.reviewScoreAvg(byStoreName.get().getStoreId());
+//        System.out.println(reviewScoreAvg);
 
 
             StoreDto dto = StoreDto.builder()
@@ -96,6 +98,7 @@ public class StoreServiceImpl implements StoreService {
                 .storeLikeCount(likeCount)
                 .storePhone(storeInfo.getStorePhone())
                 .storeOpeningDateAndHours(storeInfo.getStoreOpeningDateAndHours())
+
                 .build();
         return dto;
     }
@@ -104,19 +107,6 @@ public class StoreServiceImpl implements StoreService {
     public List<Store> getCategoryStoreList(Long categoryId) {
         return storeRepository.findAllByCategoryId(categoryId);
     }
-
-//    public void addAutoCompleteKeyword(String keyword) {
-//        this.trie.put(keyword,null);
-//    }
-//
-//    public List<String> autoComplete(String keyword) {
-//        return (List<String>) this.trie.prefixMap(keyword).keySet()
-//                .stream().collect(Collectors.toList());
-//    }
-//
-//    public void deleteAutoCompleteKeyword(String keyword) {
-//        this.trie.remove(keyword);
-//    }
 
 
 }
