@@ -20,7 +20,7 @@ public class Review {
     private Long storeId;
     private String userId;
     // 이미지도 넣을 것 private String review_img
-    private Byte reviewScore;
+    private Float reviewScore;
 
     @Column(length = 1000)
     private String reviewText;

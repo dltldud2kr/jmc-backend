@@ -77,14 +77,16 @@ public class StoreServiceImpl implements StoreService {
         if(!byStoreName.isPresent()) {
             throw new IllegalStateException("존재하지 않는 가게입니다.");
         }
-        Optional<Store> optionalStore = storeRepository.findById(byStoreName.get().getStoreId());
 
+        Optional<Store> optionalStore = storeRepository.findById(byStoreName.get().getStoreId());
         Store storeInfo = optionalStore.get();
         Long reviewCount = reviewRepository.countByStoreId(storeInfo.getStoreId());
         Long likeCount = storeLikeRepository.countByStoreId(storeInfo.getStoreId());
 
-//        Long reviewScoreAvg = reviewRepository.reviewScoreAvg(byStoreName.get().getStoreId());
-//        System.out.println(reviewScoreAvg);
+        //리뷰점수 소수점 첫째자리까지
+        Float reviewScoreAvg = reviewRepository.reviewScoreAvg(byStoreName.get().getStoreId());
+        String a = String.format("%.1f", reviewScoreAvg);
+        Float reviewAvg = Float.valueOf(a);
 
 
             StoreDto dto = StoreDto.builder()
@@ -96,9 +98,9 @@ public class StoreServiceImpl implements StoreService {
                 .storeUrl(storeInfo.getStoreUrl())
                 .storeReviewCount(reviewCount)
                 .storeLikeCount(likeCount)
+                    .reviewAvg(reviewAvg)
                 .storePhone(storeInfo.getStorePhone())
                 .storeOpeningDateAndHours(storeInfo.getStoreOpeningDateAndHours())
-
                 .build();
         return dto;
     }

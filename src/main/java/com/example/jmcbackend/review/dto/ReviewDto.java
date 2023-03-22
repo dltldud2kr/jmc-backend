@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class ReviewDto {
 
-    private Byte reviewScore;
+    private Float reviewScore;
     private String reviewText;
 
 }

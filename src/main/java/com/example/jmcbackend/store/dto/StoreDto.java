@@ -26,7 +26,7 @@ public class StoreDto {
 
         private String storeOpeningDateAndHours;    //
         private String storeInfo;
-        private Float reviewAvg;
+        private Float reviewAvg;        //소수점 1자리수까지
 
         private String userId;
 
