@@ -11,5 +11,6 @@ public class ReviewDto {
 
     private Float reviewScore;
     private String reviewText;
+    private String storeName;
 
 }

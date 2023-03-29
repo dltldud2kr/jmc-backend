@@ -26,7 +26,7 @@ public class StoreInfoParam {
     private String storeUrl;
 
     private String storeOpeningDateAndHours;    //
-    private String storeInfo;
+    private String storeIntroduction;
 
     private String userId;
 

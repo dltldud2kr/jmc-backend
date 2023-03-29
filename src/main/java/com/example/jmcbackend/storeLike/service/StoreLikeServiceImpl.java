@@ -1,17 +1,16 @@
 package com.example.jmcbackend.storeLike.service;
 
-import com.example.jmcbackend.member.entity.User;
 import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.repository.StoreRepository;
-import com.example.jmcbackend.storeLike.dto.StoreLikeDto;
 import com.example.jmcbackend.storeLike.entity.StoreLike;
 import com.example.jmcbackend.storeLike.repository.StoreLikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,20 +37,20 @@ public class StoreLikeServiceImpl implements StoreLikeService {
         Optional<StoreLike> byUserIdAndStoreId = storeLikeRepository.findByUserIdAndStoreId(userId, storeId);
 
 
+        StoreLike storeLike = StoreLike.builder()
+                .storeId(storeId)
+                .userId(userId)
+                .build();
         if(!byUserIdAndStoreId.isPresent()) {
             log.info("좋아요누른 가게가 중복 x ");
-
-            StoreLike storeLike = StoreLike.builder()
-                    .storeId(storeId)
-                    .userId(userId)
-                    .isActive(true)
-                    .build();
+            storeLike.setIsActive(true);
             storeLikeRepository.save(storeLike);
 
             return ResponseEntity.ok(storeLike);
 
         } else {
 
+            storeLike.setIsActive(false);
             storeLikeRepository.deleteById(byUserIdAndStoreId.get().getId());
             log.info("좋아요누른 가게가 전에 눌렀던 가게라면 좋아요를 풀기위해 삭제가 성공 ");
 
@@ -61,9 +60,9 @@ public class StoreLikeServiceImpl implements StoreLikeService {
     }
 
     @Override
-    public List<StoreLike> myLikeList(String userId) {
+    public Page<StoreLike> myLikeList(String userId, Pageable pageable) {
 
-        return storeLikeRepository.findAllByUserId(userId);
+        return storeLikeRepository.findAllByUserId(userId, pageable);
     }
 
 }

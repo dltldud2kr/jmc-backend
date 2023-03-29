@@ -2,6 +2,8 @@ package com.example.jmcbackend.review.service;
 
 import com.example.jmcbackend.review.dto.ReviewDto;
 import com.example.jmcbackend.review.entity.Review;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +25,11 @@ public interface ReviewService {
     /**
      * 내 리뷰 리스트
      */
-    List<Review> myReviewList(String userId);
+    Page<Review> myReviewList(String userId, Pageable pageable);
+
+    /**
+     * 가게 리뷰 리스트
+     */
+
+    Page<Review> storeReviewList(Long storeId, Pageable pageable);
 }

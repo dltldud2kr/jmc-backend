@@ -6,11 +6,10 @@ import com.example.jmcbackend.storeLike.entity.StoreLike;
 import com.example.jmcbackend.storeLike.service.StoreLikeService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -33,11 +32,11 @@ public class StoreLikeController {
 
     }
 
-    @PostMapping("/myLikeStore")
-    public ResponseEntity myLikeList(Principal principal) {
+    @GetMapping("/myLikeStore")
+    public ResponseEntity myLikeList(Principal principal, Pageable pageable) {
 
         String userId = principal.getName();
-        List<StoreLike> storeLikes =storeLikeService.myLikeList(userId);
+        Page<StoreLike> storeLikes =storeLikeService.myLikeList(userId, pageable);
 
         return ResponseEntity.ok(storeLikes);
 

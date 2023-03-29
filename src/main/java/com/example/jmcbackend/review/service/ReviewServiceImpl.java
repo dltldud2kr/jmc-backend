@@ -1,13 +1,13 @@
 package com.example.jmcbackend.review.service;
 
-import com.example.jmcbackend.exception.AppException;
 import com.example.jmcbackend.review.dto.ReviewDto;
 import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.repository.StoreRepository;
-import com.example.jmcbackend.storeLike.entity.StoreLike;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +24,16 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Review add(ReviewDto dto , String userId, Long storeId) {
+        String storeName = storeRepository.findById(storeId).get().getStoreName();
 
-        String storeName =  storeRepository.findById(storeId).get().getStoreName();
 
         Review review = Review.builder()
                 .userId(userId)
                 .storeId(storeId)
                 .reviewScore(dto.getReviewScore())
+                .storeName(storeName)
                 .reviewText(dto.getReviewText())
                 .reviewCreated(LocalDateTime.now())
-                .storeName(storeName)
                 .build();
 
         reviewRepository.save(review);
@@ -41,9 +41,7 @@ public class ReviewServiceImpl implements ReviewService{
         return review;
     }
 
-    /**
-     * 자신의 게시글에만 x(삭제) 표시가 뜨게끔 하려면 어떻게 해야할까?
-     */
+
     @Override
     public ResponseEntity del(Long reviewId, String userId) {
         Optional<Review> optionalReview = reviewRepository.findById(reviewId);
@@ -61,9 +59,15 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<Review> myReviewList(String userId) {
+    public Page<Review> myReviewList(String userId, Pageable pageable) {
 
-        return reviewRepository.findAllByUserId(userId);
+        return reviewRepository.findAllByUserId(userId, pageable);
+    }
+
+    @Override
+    public Page<Review> storeReviewList(Long storeId, Pageable pageable) {
+
+        return reviewRepository.findAllByStoreId(storeId, pageable);
     }
 
 

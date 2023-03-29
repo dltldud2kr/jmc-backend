@@ -44,6 +44,6 @@ public class UserController {
     public ResponseEntity login(@RequestBody UserLoginRequest dto) {
 
         String token = userServiceImpl.login(dto);
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.ok().body(token); // hashmap으로하세요.
     }
 }

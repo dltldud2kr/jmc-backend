@@ -4,6 +4,8 @@ import com.example.jmcbackend.review.dto.ReviewDto;
 import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/reviews")
+@RequestMapping("/review")
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -36,12 +38,21 @@ public class ReviewController {
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping("/myReviewList")
-    public ResponseEntity myReviewList(Principal principal) {
+    @GetMapping("/myReviewList")
+    public ResponseEntity myReviewList(Principal principal, Pageable pageable) {
         String userId = principal.getName();
 
-        List<Review> reviews = reviewService.myReviewList(userId);
+        Page<Review> reviews = reviewService.myReviewList(userId, pageable);
 
         return ResponseEntity.ok(reviews);
     }
+
+    @GetMapping("/{storeId}/reviewList")
+    public ResponseEntity storeReviewList(@PathVariable("storeId") Long storeId, Pageable pageable) {
+
+        Page<Review> reviews = reviewService.storeReviewList(storeId, pageable);
+
+        return ResponseEntity.ok(reviews);
+    }
+
 }
