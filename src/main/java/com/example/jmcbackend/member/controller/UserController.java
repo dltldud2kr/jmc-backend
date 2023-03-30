@@ -2,10 +2,8 @@ package com.example.jmcbackend.member.controller;
 
 import com.example.jmcbackend.exception.AppException;
 import com.example.jmcbackend.exception.ErrorCode;
-import com.example.jmcbackend.member.dto.UserDto;
 import com.example.jmcbackend.member.dto.UserJoinRequest;
 import com.example.jmcbackend.member.dto.UserLoginRequest;
-import com.example.jmcbackend.member.entity.User;
 import com.example.jmcbackend.member.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,9 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
