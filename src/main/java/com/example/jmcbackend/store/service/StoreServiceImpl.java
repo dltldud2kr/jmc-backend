@@ -1,5 +1,7 @@
 package com.example.jmcbackend.store.service;
 
+import com.example.jmcbackend.exception.AppException;
+import com.example.jmcbackend.exception.ErrorCode;
 import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
@@ -10,14 +12,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -67,12 +68,12 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<StoreDto> getAllStore() {
+    public Page<StoreDto> getAllStore(Pageable pageable) {
 
-        List<Store> storeList= storeRepository.findAll();
-        List<StoreDto> list = of(storeList);
+        Page<Store> storePage= storeRepository.findAll(pageable);
+        List<StoreDto> storeDtoList = of(storePage.getContent());
 
-        return of(storeList);
+        return new PageImpl<>(storeDtoList, pageable, storePage.getTotalElements());
     }
 
 
@@ -105,6 +106,18 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public List<StoreDto> myStoreList(String userId) {
+
+        List<Store> myStoreList = storeRepository.findByUserId(userId);
+//        if (myStoreList.isEmpty()){
+//            throw new AppException(ErrorCode.STORE_NOT_FOUND,"Cannot found your store.");
+//        }
+
+        List<StoreDto> storeDtoList = of(myStoreList);
+        return storeDtoList;
+    }
+
+    @Override
     public List<Store> getCategoryStoreList(Long categoryId) {
         return storeRepository.findAllByCategoryId(categoryId);
     }
@@ -115,7 +128,27 @@ public class StoreServiceImpl implements StoreService {
         return storeRepository.findByStoreNameContaining(keyword);
     }
 
+    @Override
+    public void modify(String userId, Long storeId, StoreDto dto) {
 
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new NoSuchElementException("Cannot find store with storeId" + storeId));
+
+        if (!store.getUserId().equals(userId)) {
+            throw new AppException(ErrorCode.UN_AUTHORIZED, "You do not have permission to modify this store.");
+        }
+            store.setStoreName(dto.getStoreName());
+            store.setStoreUrl(dto.getStoreUrl());
+            store.setStoreAddress(dto.getStoreAddress());
+            store.setStorePhone(dto.getStorePhone());
+            store.setStoreIntroduction(dto.getStoreIntroduction());
+            store.setStoreOpeningDateAndHours(dto.getStoreOpeningDateAndHours());
+            store.setCategoryId(dto.getCategoryId());
+            store.setStoreUpdated(LocalDateTime.now());
+
+            storeRepository.save(store);
+
+        }
 
 
 

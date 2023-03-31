@@ -19,4 +19,13 @@ public interface UserService {
      */
     String login(UserLoginRequest dto);
 
+    /**
+     * 내 정보
+     */
+    UserDto myInfo(String userId);
+
+    /**
+     * 정보 수정
+     */
+    void modify(String userId, UserDto dto);
 }

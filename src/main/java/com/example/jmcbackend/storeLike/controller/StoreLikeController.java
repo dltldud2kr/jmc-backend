@@ -2,6 +2,7 @@ package com.example.jmcbackend.storeLike.controller;
 
 
 import com.example.jmcbackend.store.entity.Store;
+import com.example.jmcbackend.storeLike.dto.StoreLikeDto;
 import com.example.jmcbackend.storeLike.entity.StoreLike;
 import com.example.jmcbackend.storeLike.service.StoreLikeService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class StoreLikeController {
     public ResponseEntity myLikeList(Principal principal, Pageable pageable) {
 
         String userId = principal.getName();
-        Page<StoreLike> storeLikes =storeLikeService.myLikeList(userId, pageable);
+        Page<StoreLikeDto> storeLikes =storeLikeService.myLikeList(userId, pageable);
 
         return ResponseEntity.ok(storeLikes);
 

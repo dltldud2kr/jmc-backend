@@ -42,7 +42,7 @@ public class ReviewController {
     public ResponseEntity myReviewList(Principal principal, Pageable pageable) {
         String userId = principal.getName();
 
-        Page<Review> reviews = reviewService.myReviewList(userId, pageable);
+        Page<ReviewDto> reviews = reviewService.myReviewList(userId, pageable);
 
         return ResponseEntity.ok(reviews);
     }
@@ -50,7 +50,7 @@ public class ReviewController {
     @GetMapping("/{storeId}/reviewList")
     public ResponseEntity storeReviewList(@PathVariable("storeId") Long storeId, Pageable pageable) {
 
-        Page<Review> reviews = reviewService.storeReviewList(storeId, pageable);
+        Page<ReviewDto> reviews = reviewService.storeReviewList(storeId, pageable);
 
         return ResponseEntity.ok(reviews);
     }

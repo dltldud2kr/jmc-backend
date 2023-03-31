@@ -46,7 +46,7 @@ public class StoreController {
     public ResponseEntity list (Pageable pageable){
 
 
-        List<StoreDto> stores =storeService.getAllStore();
+        Page<StoreDto> stores =storeService.getAllStore(pageable);
 
         return ResponseEntity.ok(stores);
     }

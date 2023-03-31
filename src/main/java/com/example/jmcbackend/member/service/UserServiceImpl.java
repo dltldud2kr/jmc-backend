@@ -10,13 +10,12 @@ import com.example.jmcbackend.member.repository.UserRepository;
 import com.example.jmcbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -31,20 +30,12 @@ public class UserServiceImpl implements UserService{
 
     public ResponseEntity join(UserJoinRequest dto) {
 
-//        // userName 중복 check
-//        userRepository.findById(dto.getUserId())
-//                .ifPresent(user -> {
-//                    throw new AppException(ErrorCode.USERNAME_DUPLICATED , dto.getUserId() + "는 이미 있습니다.");
-////                    throw new RuntimeException(dto.getUserId() + "는 이미 있습니다.");
-//                });
+        // userName 중복 check
+        userRepository.findById(dto.getUserId())
+                .ifPresent(user -> {
+                    throw new AppException(ErrorCode.USERNAME_DUPLICATED , dto.getUserId() + "is already there.");
+                });
 
-
-        Optional<User> byId = userRepository.findById(dto.getUserId());
-
-        //계정이 존재할 경우:
-        if(byId.isPresent()) {
-            throw new IllegalStateException("exist");
-        } else {
             // 저장
             User user = User.builder()
                     .userId(dto.getUserId())
@@ -55,18 +46,17 @@ public class UserServiceImpl implements UserService{
                     .build();
             userRepository.save(user);
             return ResponseEntity.ok().body(null);
-        }
 
     }
 
     public String login(UserLoginRequest dto){
         // userName 없음
         User selectedUser = userRepository.findById(dto.getUserId())
-                .orElseThrow(() ->new AppException(ErrorCode.USERNAME_NOT_FOUND, dto.getUserId() + "이 없습니다."));
+                .orElseThrow(() ->new AppException(ErrorCode.USERNAME_NOT_FOUND, dto.getUserId() + "not exist."));
 
         // password 틀림
         if(!encoder.matches(dto.getPassword(), selectedUser.getPassword())) {
-            throw new AppException(ErrorCode.INVALID_PASSWORD, "패스워드를 잘못 입력했습니다.");
+            throw new AppException(ErrorCode.INVALID_PASSWORD, "wrong password");
         }
 
         String token = JwtUtil.createJwt(selectedUser.getUserId(), secretKey, expiredTimeMs);
@@ -76,5 +66,38 @@ public class UserServiceImpl implements UserService{
         return token;
     }
 
+    @Override
+    public UserDto myInfo(String userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("Cannot find user with userId " + userId));
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(user.getUserId());
+        userDto.setUserName(user.getUserName());
+        userDto.setUserNickname(user.getUserNickname());
+        userDto.setRegDt(user.getRegDt());
+
+        return userDto;
+    }
+
+    @Override
+    public void modify(String userId, UserDto dto) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("Cannot find user with userId " + userId));
+
+        if (!user.getUserId().equals(userId)) {
+            throw new AppException(ErrorCode.UN_AUTHORIZED, "You do not have permission to modify this store.");
+        }
+
+        user.setUserName(dto.getUserName());
+        user.setUserNickname(dto.getUserNickname());
+        user.setPassword(encoder.encode(dto.getPassword()));
+        user.setUdtDt(LocalDateTime.now());
+
+        userRepository.save(user);
+
+    }
 
 }

@@ -21,5 +21,5 @@ public interface StoreLikeService {
      * @param userId
      * @return
      */
-    Page<StoreLike> myLikeList(String userId, Pageable pageable);
+    Page<StoreLikeDto> myLikeList(String userId, Pageable pageable);
 }

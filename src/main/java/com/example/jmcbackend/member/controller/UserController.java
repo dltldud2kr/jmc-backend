@@ -1,12 +1,9 @@
 package com.example.jmcbackend.member.controller;
 
-import com.example.jmcbackend.exception.AppException;
-import com.example.jmcbackend.exception.ErrorCode;
 import com.example.jmcbackend.member.dto.UserJoinRequest;
 import com.example.jmcbackend.member.dto.UserLoginRequest;
 import com.example.jmcbackend.member.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,17 +19,7 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity join(@RequestBody UserJoinRequest dto) {
-
-        try {
-            return userServiceImpl.join(dto);
-        } catch (IllegalStateException ex) {
-            if(ex.getMessage().equals("exist")){
-                throw new AppException(ErrorCode.USERNAME_DUPLICATED , dto.getUserId() + "는 이미 있습니다.");
-            }
-        } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return userServiceImpl.join(dto);
     }
 
     @PostMapping("/login")

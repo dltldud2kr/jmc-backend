@@ -1,9 +1,6 @@
 package com.example.jmcbackend.review.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 public class Review {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
@@ -27,6 +25,7 @@ public class Review {
     private String reviewText;
 
     private LocalDateTime reviewCreated;
+    private LocalDateTime reviewUpdated;
 
 
 }

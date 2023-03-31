@@ -1,5 +1,7 @@
 package com.example.jmcbackend.review.service;
 
+import com.example.jmcbackend.exception.AppException;
+import com.example.jmcbackend.exception.ErrorCode;
 import com.example.jmcbackend.review.dto.ReviewDto;
 import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.repository.ReviewRepository;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -59,15 +62,38 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public Page<Review> myReviewList(String userId, Pageable pageable) {
+    public void modify(String userId, Long reviewId, ReviewDto dto) {
 
-        return reviewRepository.findAllByUserId(userId, pageable);
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new NoSuchElementException("Cannot find store with reviewId" + reviewId));
+
+        if(!review.getUserId().equals(userId)){
+            throw new AppException(ErrorCode.UN_AUTHORIZED,"You do not have permission to modify this review.");
+        }
+
+        review.setReviewScore(dto.getReviewScore());
+        review.setReviewText(dto.getReviewText());
+        review.setReviewUpdated(LocalDateTime.now());
+
+        reviewRepository.save(review);
+
     }
 
     @Override
-    public Page<Review> storeReviewList(Long storeId, Pageable pageable) {
+    public Page<ReviewDto> myReviewList(String userId, Pageable pageable) {
 
-        return reviewRepository.findAllByStoreId(storeId, pageable);
+        Page<Review> review = reviewRepository.findAllByUserId(userId, pageable);
+        Page<ReviewDto> reviewDtoPage = review.map(ReviewDto::of);
+        return reviewDtoPage;
+    }
+
+    @Override
+    public Page<ReviewDto> storeReviewList(Long storeId, Pageable pageable) {
+
+        Page<Review> review = reviewRepository.findAllByStoreId(storeId, pageable);
+        Page<ReviewDto> storeReviewList = review.map(ReviewDto::of);
+
+        return storeReviewList;
     }
 
 

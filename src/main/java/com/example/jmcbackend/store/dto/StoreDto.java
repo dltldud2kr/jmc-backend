@@ -3,8 +3,10 @@ package com.example.jmcbackend.store.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
@@ -23,6 +25,7 @@ public class StoreDto {
         private String storePhone;
         private String storeAddress;
         private String storeUrl;
+        private String userId;
 
         private String storeOpeningDateAndHours;    //
         private String storeIntroduction;

@@ -2,6 +2,7 @@ package com.example.jmcbackend.storeLike.service;
 
 import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.repository.StoreRepository;
+import com.example.jmcbackend.storeLike.dto.StoreLikeDto;
 import com.example.jmcbackend.storeLike.entity.StoreLike;
 import com.example.jmcbackend.storeLike.repository.StoreLikeRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class StoreLikeServiceImpl implements StoreLikeService {
         Optional<Store> optionalStoreId = storeRepository.findById(storeId);
 
         if (!optionalStoreId.isPresent()) {
-            throw new IllegalStateException("가게가 존재하지 않습니다.");
+            throw new IllegalStateException("The store does not exist.");
         }
         Optional<StoreLike> byUserIdAndStoreId = storeLikeRepository.findByUserIdAndStoreId(userId, storeId);
 
@@ -54,15 +55,17 @@ public class StoreLikeServiceImpl implements StoreLikeService {
             storeLikeRepository.deleteById(byUserIdAndStoreId.get().getId());
             log.info("좋아요누른 가게가 전에 눌렀던 가게라면 좋아요를 풀기위해 삭제가 성공 ");
 
-            return ResponseEntity.ok("좋아요 목록에서 제거");
+            return ResponseEntity.ok("Cancel the likes");
         }
 
     }
 
     @Override
-    public Page<StoreLike> myLikeList(String userId, Pageable pageable) {
+    public Page<StoreLikeDto> myLikeList(String userId, Pageable pageable) {
 
-        return storeLikeRepository.findAllByUserId(userId, pageable);
+        Page<StoreLike> storeLikes = storeLikeRepository.findAllByUserId(userId, pageable);
+        Page<StoreLikeDto> storeLikeList = storeLikes.map(StoreLikeDto::of);
+        return storeLikeList;
     }
 
 }

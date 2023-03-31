@@ -18,6 +18,8 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Page<Store> findAll(Pageable pageable);
 
+    List<Store> findByUserId(String userId);
+
 
 
 }

@@ -26,12 +26,17 @@ public interface StoreService {
      * 가게 리스트
      */
 
-    List<StoreDto> getAllStore ();
+    Page<StoreDto> getAllStore (Pageable pageable);
 
     /**
      * 가게 관련 정보
      */
     StoreDto storeInfo(StoreInfoParam storeName);
+
+    /**
+     * 내 가게 리스트
+     */
+    List<StoreDto> myStoreList(String userId);
 
     /**
      * 카테고리 리스트
@@ -43,6 +48,11 @@ public interface StoreService {
      * 가게 검색 기능
      */
     List<Store> search(String keyword);
+
+    /**
+     * 가게 정보 수정
+     */
+    void modify(String userId, Long storeId, StoreDto storeDto);
 
 
 

@@ -10,7 +10,8 @@ public enum ErrorCode {
     USERNAME_DUPLICATED(HttpStatus.CONFLICT, ""),
     USERNAME_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, ""),
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "")
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
+    UN_AUTHORIZED(HttpStatus.UNAUTHORIZED,"")
 
     ;
 
