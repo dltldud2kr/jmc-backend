@@ -26,7 +26,7 @@ public interface ReviewService {
     /**
      * 리뷰 수정
      */
-    void modify (String userId, Long reviewId, ReviewDto reviewDto);
+    ResponseEntity modify (String userId, Long reviewId, ReviewDto reviewDto);
 
     /**
      * 내 리뷰 리스트

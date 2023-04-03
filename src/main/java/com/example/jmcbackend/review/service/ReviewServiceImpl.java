@@ -58,11 +58,11 @@ public class ReviewServiceImpl implements ReviewService{
             throw new IllegalStateException("자신의 게시글이 아닙니다.");
         }
 
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body("삭제완료");
     }
 
     @Override
-    public void modify(String userId, Long reviewId, ReviewDto dto) {
+    public ResponseEntity modify(String userId, Long reviewId, ReviewDto dto) {
 
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new NoSuchElementException("Cannot find store with reviewId" + reviewId));
@@ -76,6 +76,8 @@ public class ReviewServiceImpl implements ReviewService{
         review.setReviewUpdated(LocalDateTime.now());
 
         reviewRepository.save(review);
+
+        return ResponseEntity.ok().body("수정완료");
 
     }
 

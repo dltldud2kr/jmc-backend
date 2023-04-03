@@ -1,9 +1,11 @@
 package com.example.jmcbackend.store.service;
+import com.example.jmcbackend.member.dto.StoreEditDto;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
 import com.example.jmcbackend.store.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public interface StoreService {
     /**
      * 가게 삭제
      */
-    void deleteStore(StoreInfoParam parameter);
+    ResponseEntity deleteStore(Long storeId, String userId);
 
 
     /**
@@ -31,7 +33,7 @@ public interface StoreService {
     /**
      * 가게 관련 정보
      */
-    StoreDto storeInfo(StoreInfoParam storeName);
+    StoreDto storeInfo(Long storeId);
 
     /**
      * 내 가게 리스트
@@ -52,7 +54,7 @@ public interface StoreService {
     /**
      * 가게 정보 수정
      */
-    void modify(String userId, Long storeId, StoreDto storeDto);
+    ResponseEntity modify(String userId, Long storeId, StoreEditDto storeDto);
 
 
 

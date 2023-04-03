@@ -29,14 +29,7 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/del/{reviewId}")
-    public ResponseEntity<Review> delReview(Principal principal, @PathVariable("reviewId") Long reviewId) {
 
-        String userId = principal.getName();
-        reviewService.del(reviewId,userId);
-
-        return ResponseEntity.ok(null);
-    }
 
     @GetMapping("/myReviewList")
     public ResponseEntity myReviewList(Principal principal, Pageable pageable) {
@@ -47,12 +40,6 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-    @GetMapping("/{storeId}/reviewList")
-    public ResponseEntity storeReviewList(@PathVariable("storeId") Long storeId, Pageable pageable) {
 
-        Page<ReviewDto> reviews = reviewService.storeReviewList(storeId, pageable);
-
-        return ResponseEntity.ok(reviews);
-    }
 
 }

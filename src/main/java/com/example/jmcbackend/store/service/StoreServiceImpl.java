@@ -2,6 +2,7 @@ package com.example.jmcbackend.store.service;
 
 import com.example.jmcbackend.exception.AppException;
 import com.example.jmcbackend.exception.ErrorCode;
+import com.example.jmcbackend.member.dto.StoreEditDto;
 import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -57,14 +59,15 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void deleteStore(StoreInfoParam parameter) {
+    public ResponseEntity deleteStore(Long storeId, String userId) {
+        Optional<Store> store = storeRepository.findById(storeId);
 
-        Optional<Store> store = storeRepository.findById(parameter.getStoreId());
-        store.ifPresentOrElse(storeRepository::delete,
-                ()-> {
-                    throw new IllegalStateException("가게 삭제 오류");
-                });
-
+        if (store.isPresent() && store.get().getUserId().equals(userId)) {
+            store.ifPresent(storeRepository::delete);
+            return ResponseEntity.ok().body("삭제완료");
+        } else {
+            throw new IllegalStateException("가게 삭제 오류");
+        }
     }
 
     @Override
@@ -78,16 +81,16 @@ public class StoreServiceImpl implements StoreService {
 
 
     @Override
-    public StoreDto storeInfo(StoreInfoParam storeName) {
+    public StoreDto storeInfo(Long storeId) {
 
-        Store storeInfo = storeRepository.findByStoreName(storeName.getStoreName())
+        Store storeInfo = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 가게입니다."));
 
-        Long reviewCount = reviewRepository.countByStoreId(storeInfo.getStoreId());
-        Long likeCount = storeLikeRepository.countByStoreId(storeInfo.getStoreId());
+        Long reviewCount = reviewRepository.countByStoreId(storeId);
+        Long likeCount = storeLikeRepository.countByStoreId(storeId);
 
         //리뷰점수 소수점 첫째자리까지
-        Float reviewAvg = reviewRepository.reviewScoreAvg(storeInfo.getStoreId());
+        Float reviewAvg = reviewRepository.reviewScoreAvg(storeId);
 
             StoreDto dto = StoreDto.builder()
                 .storeId(storeInfo.getStoreId())
@@ -109,9 +112,9 @@ public class StoreServiceImpl implements StoreService {
     public List<StoreDto> myStoreList(String userId) {
 
         List<Store> myStoreList = storeRepository.findByUserId(userId);
-//        if (myStoreList.isEmpty()){
-//            throw new AppException(ErrorCode.STORE_NOT_FOUND,"Cannot found your store.");
-//        }
+        if (myStoreList.isEmpty()){
+            throw new AppException(ErrorCode.STORE_NOT_FOUND,"Cannot found your store.");
+        }
 
         List<StoreDto> storeDtoList = of(myStoreList);
         return storeDtoList;
@@ -129,14 +132,17 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void modify(String userId, Long storeId, StoreDto dto) {
+    public ResponseEntity modify(String userId, Long storeId, StoreEditDto dto) {
 
+        log.info("가게가있는지 찾아봄.");
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NoSuchElementException("Cannot find store with storeId" + storeId));
 
+        log.info("유저아이디와 가게작성자 아이디를 비교함.");
         if (!store.getUserId().equals(userId)) {
             throw new AppException(ErrorCode.UN_AUTHORIZED, "You do not have permission to modify this store.");
         }
+        log.info("dto로 받은 값을 entity로 옮김");
             store.setStoreName(dto.getStoreName());
             store.setStoreUrl(dto.getStoreUrl());
             store.setStoreAddress(dto.getStoreAddress());
@@ -146,8 +152,12 @@ public class StoreServiceImpl implements StoreService {
             store.setCategoryId(dto.getCategoryId());
             store.setStoreUpdated(LocalDateTime.now());
 
+            log.info("repository에 저장함.");
             storeRepository.save(store);
 
+        System.out.println(store.getStoreName());
+
+            return ResponseEntity.ok().body("수정완료");
         }
 
 

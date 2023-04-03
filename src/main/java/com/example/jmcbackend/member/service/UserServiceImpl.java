@@ -10,6 +10,7 @@ import com.example.jmcbackend.member.repository.UserRepository;
 import com.example.jmcbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void modify(String userId, UserDto dto) {
+    public ResponseEntity modify(String userId, UserDto dto) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Cannot find user with userId " + userId));
@@ -98,6 +99,7 @@ public class UserServiceImpl implements UserService{
 
         userRepository.save(user);
 
+        return ResponseEntity.ok().body("수정완료");
     }
 
 }

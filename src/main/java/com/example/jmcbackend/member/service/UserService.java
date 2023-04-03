@@ -27,5 +27,5 @@ public interface UserService {
     /**
      * 정보 수정
      */
-    void modify(String userId, UserDto dto);
+    ResponseEntity modify(String userId, UserDto dto);
 }
