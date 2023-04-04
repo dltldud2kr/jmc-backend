@@ -79,6 +79,16 @@ public class StoreServiceImpl implements StoreService {
         return new PageImpl<>(storeDtoList, pageable, storePage.getTotalElements());
     }
 
+//    @Override
+//    public List<StoreDto> getAllStore() {
+//
+//        List<Store> storePage= storeRepository.findAll();
+//        List<StoreDto> storeDtoList = of(storePage);
+//
+//        return storeDtoList;
+//    }
+//
+
 
     @Override
     public StoreDto storeInfo(Long storeId) {
@@ -197,6 +207,8 @@ public class StoreServiceImpl implements StoreService {
                 .storeOpeningDateAndHours(store.getStoreOpeningDateAndHours())
                 .build();
     }
+
+
 
 
 }

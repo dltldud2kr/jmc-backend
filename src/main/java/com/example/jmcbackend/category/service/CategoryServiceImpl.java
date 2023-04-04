@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +35,18 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDto> getAllCategories() {
+
+        List<Category> categories= categoryRepository.findAll();
+
+        List<CategoryDto> categoryDtos = categories.stream().map(category ->
+                        CategoryDto.builder()
+                                .categoryId(category.getCategoryId())
+                                .categoryName(category.getCategoryName())
+                                .build())
+                .collect(Collectors.toList());
+
+        return categoryDtos;
     }
 
 

@@ -28,11 +28,12 @@ public class CategoryController {
 
     }
 
-    @GetMapping("/list")
-    public ResponseEntity categoryList(){
+    @GetMapping
+    public ResponseEntity<List<CategoryDto>> categoryList(){
 
-        List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        List<CategoryDto> allCategories = categoryService.getAllCategories();
+
+        return ResponseEntity.ok(allCategories);
     }
 
 

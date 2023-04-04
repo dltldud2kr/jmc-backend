@@ -39,11 +39,14 @@ public class StoreController {
     @GetMapping("/list")
     public ResponseEntity list (Pageable pageable){
 
-
         Page<StoreDto> stores =storeService.getAllStore(pageable);
 
         return ResponseEntity.ok(stores);
     }
+
+    /**
+     * 가게 클릭시 가게 세부정보
+     */
     @GetMapping("/{storeId}/info")
     public ResponseEntity storeInfo (@PathVariable("storeId") Long storeId) {
 
@@ -65,6 +68,9 @@ public class StoreController {
         return ResponseEntity.ok(stores);
     }
 
+    /**
+     * 가게 검색기능
+     */
 
     @GetMapping("/search")
     public ResponseEntity searchStoreList(@RequestParam String keyword) {

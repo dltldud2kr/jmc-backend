@@ -20,7 +20,7 @@ public interface CategoryService {
     /**
      * 카테고리 리스트
      */
-    List<Category> getAllCategories ();
+    List<CategoryDto> getAllCategories ();
 
 
 }

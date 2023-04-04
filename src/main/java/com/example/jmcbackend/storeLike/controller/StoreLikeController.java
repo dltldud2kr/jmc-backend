@@ -22,8 +22,8 @@ public class StoreLikeController {
 
     private final StoreLikeService storeLikeService;
 
-    @PostMapping("/add/storeId/{store}")
-    public ResponseEntity add(Principal principal ,@PathVariable("store") Long storeId) {
+    @PostMapping("/add/storeId/{storeId}")
+    public ResponseEntity add(Principal principal ,@PathVariable("storeId") Long storeId) {
 
         String userId = principal.getName();
         ResponseEntity result = storeLikeService.add(userId, storeId);

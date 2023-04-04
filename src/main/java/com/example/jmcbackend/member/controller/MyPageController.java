@@ -50,13 +50,31 @@ public class MyPageController {
         return ResponseEntity.ok(mypageDto);
     }
 
-    @GetMapping("/storeEdit")
-    public ResponseEntity myStoreList(Principal principal, Pageable pageable){
+    /**
+     * 내 좋아요 가게 목록
+     */
+    @GetMapping("/storeLikeEdit")
+    public ResponseEntity storeLikeList(Principal principal, Pageable pageable){
         String userId = principal.getName();
         Page<StoreLikeDto> storeLikeList = storeLikeService.myLikeList(userId, pageable);
 
         return ResponseEntity.ok(storeLikeList);
     }
+
+
+    /**
+     * 내 가게 Edit
+     */
+
+    @GetMapping("/storeEdit")
+    public ResponseEntity myStoreList(Principal principal){
+
+        String userId = principal.getName();
+        List<StoreDto> storeList = storeService.myStoreList(userId);
+
+        return ResponseEntity.ok(storeList);
+    }
+
 
     @PostMapping("/{storeId}/storeEdit")
     public ResponseEntity storeEdit(@PathVariable("storeId") Long storeId, Principal principal, @RequestBody StoreEditDto dto){
@@ -77,6 +95,9 @@ public class MyPageController {
     }
 
 
+    /**
+     * 내 리뷰 Edit
+     */
     @GetMapping("/reviewEdit")
     public ResponseEntity myReviewList(Principal principal, Pageable pageable) {
         String userId = principal.getName();
@@ -102,6 +123,10 @@ public class MyPageController {
 
         return ResponseEntity.ok(result);
     }
+
+    /**
+     * 내 정보 수정
+     */
     @PostMapping("/userEdit")
         public ResponseEntity userInfoEdit( Principal principal, @RequestBody UserDto dto) {
             String userId = principal.getName();
@@ -110,7 +135,7 @@ public class MyPageController {
 
             return ResponseEntity.ok(result);
         }
-//    @PostMapping("/{storeLikeId}/likeEdit")
+
 
 
 }

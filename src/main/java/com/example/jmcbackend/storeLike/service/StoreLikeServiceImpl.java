@@ -57,7 +57,6 @@ public class StoreLikeServiceImpl implements StoreLikeService {
 
             return ResponseEntity.ok("Cancel the likes");
         }
-
     }
 
     @Override
