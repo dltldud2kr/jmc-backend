@@ -136,6 +136,15 @@ public class MyPageController {
             return ResponseEntity.ok(result);
         }
 
+    @DeleteMapping("/userEdit")
+    public ResponseEntity userDelete( Principal principal) {
+        String userId = principal.getName();
+
+        ResponseEntity result = userService.delete(userId);
+
+        return ResponseEntity.ok(result);
+    }
+
 
 
 }

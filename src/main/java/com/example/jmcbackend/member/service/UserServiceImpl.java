@@ -4,19 +4,22 @@ import com.example.jmcbackend.exception.AppException;
 import com.example.jmcbackend.exception.ErrorCode;
 import com.example.jmcbackend.member.dto.UserDto;
 import com.example.jmcbackend.member.dto.UserJoinRequest;
-import com.example.jmcbackend.member.dto.UserLoginRequest;
+import com.example.jmcbackend.member.dto.UserListResponse;
+import com.example.jmcbackend.member.dto.UserLoginResponse;
 import com.example.jmcbackend.member.entity.User;
 import com.example.jmcbackend.member.repository.UserRepository;
 import com.example.jmcbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +53,7 @@ public class UserServiceImpl implements UserService{
 
     }
 
-    public String login(UserLoginRequest dto){
+    public String login(UserLoginResponse dto){
         // userName 없음
         User selectedUser = userRepository.findById(dto.getUserId())
                 .orElseThrow(() ->new AppException(ErrorCode.USERNAME_NOT_FOUND, dto.getUserId() + "not exist."));
@@ -65,6 +68,18 @@ public class UserServiceImpl implements UserService{
         // Exception 안 났을 때 토큰 발행
 
         return token;
+    }
+
+    @Override
+    public ResponseEntity delete(String userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (user.isPresent()){
+            userRepository.delete(user.get());
+            return ResponseEntity.ok("delete success");
+        } else {
+            throw new AppException(ErrorCode.USERNAME_NOT_FOUND," user not found.");
+        }
     }
 
     @Override
@@ -100,6 +115,23 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
 
         return ResponseEntity.ok().body("수정완료");
+    }
+
+    @Override
+    public List<UserListResponse> list() {
+
+        List<User> list = userRepository.findAll();
+
+        List<UserListResponse> userListResponses = new ArrayList<>();
+        for (User x : list)
+        userListResponses.add(UserListResponse.builder()
+                .userId(x.getUserId())
+                        .regDt(x.getRegDt())
+                        .userNickname(x.getUserNickname())
+                        .userName(x.getUserName())
+                .build()
+        );
+        return userListResponses;
     }
 
 }

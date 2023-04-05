@@ -1,18 +1,19 @@
 package com.example.jmcbackend.member.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-public class UserLoginRequest {
+@NoArgsConstructor
+@Data
+@Builder
+public class UserListResponse {
     private String userId;
     private String userName;
-    private String password;
     private String userNickname;
     private LocalDateTime regDt;
 }
