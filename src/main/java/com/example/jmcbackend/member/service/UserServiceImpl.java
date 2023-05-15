@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -44,7 +48,7 @@ public class UserServiceImpl implements UserService{
             User user = User.builder()
                     .userId(dto.getUserId())
                     .userName(dto.getUserName())
-                    .userNickname(dto.getUserNickname())
+                    .nickname(dto.getNickname())
                     .regDt(LocalDateTime.now())
                     .password(encoder.encode(dto.getPassword()))
                     .build();
@@ -91,7 +95,7 @@ public class UserServiceImpl implements UserService{
         UserDto userDto = new UserDto();
         userDto.setUserId(user.getUserId());
         userDto.setUserName(user.getUserName());
-        userDto.setUserNickname(user.getUserNickname());
+        userDto.setNickname(user.getNickname());
         userDto.setRegDt(user.getRegDt());
 
         return userDto;
@@ -108,9 +112,9 @@ public class UserServiceImpl implements UserService{
         }
 
         user.setUserName(dto.getUserName());
-        user.setUserNickname(dto.getUserNickname());
+        user.setNickname(dto.getNickname());
         user.setPassword(encoder.encode(dto.getPassword()));
-        user.setUdtDt(LocalDateTime.now());
+//        user.setUdtDt(LocalDateTime.now());
 
         userRepository.save(user);
 
@@ -127,11 +131,13 @@ public class UserServiceImpl implements UserService{
         userListResponses.add(UserListResponse.builder()
                 .userId(x.getUserId())
                         .regDt(x.getRegDt())
-                        .userNickname(x.getUserNickname())
+                        .nickname(x.getNickname())
                         .userName(x.getUserName())
                 .build()
         );
         return userListResponses;
     }
+
+
 
 }

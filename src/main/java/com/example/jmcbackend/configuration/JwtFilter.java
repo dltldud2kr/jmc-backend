@@ -1,6 +1,7 @@
 package com.example.jmcbackend.configuration;
 import com.example.jmcbackend.member.service.UserServiceImpl;
 import com.example.jmcbackend.utils.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -39,25 +40,31 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Token 꺼내기
         String token = authorization.split(" ")[1];
+        try {
+            // Token Expired 되었는지 여부
+            if (JwtUtil.isExpired(token, secretKey)) {
+                log.error("Token이 만료 되었습니다.");
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        // Token Expired 되었는지 여부
-        if (JwtUtil.isExpired(token, secretKey)) {
-            log.error("Token이 만료 되었습니다.");
-            filterChain.doFilter(request, response);
-            return;
+
+            //UserName Token에서 꺼내기
+            String userId = JwtUtil.getUserId(token,secretKey);
+            log.info("userId:{}" , userId);
+
+            // 권한 부여
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority("USER")));
+            // Detail 넣기
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            filterChain.doFilter(request,response);
+
+            //try catch 추가 ( 이부분 )
+        } catch (JwtException e) {
+            log.error("잘못된 JWT 서명입니다: {}", e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "잘못된 JWT 서명입니다.");
         }
-
-
-        //UserName Token에서 꺼내기
-        String userId = JwtUtil.getUserId(token,secretKey);
-        log.info("userId:{}" , userId);
-
-        // 권한 부여
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userId, null, List.of(new SimpleGrantedAuthority("USER")));
-        // Detail 넣기
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        filterChain.doFilter(request,response);
     }
 }

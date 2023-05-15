@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class MainDto {
 
     private String storeName;
-    private String storeAddress;
+    private String address;
     private Long reviewCount;
     private Float reviewAvg;
     private Long likeCount;

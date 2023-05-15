@@ -4,6 +4,7 @@ import com.example.jmcbackend.category.dto.CategoryDto;
 import com.example.jmcbackend.category.entity.Category;
 import com.example.jmcbackend.category.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,6 +48,18 @@ public class CategoryServiceImpl implements CategoryService{
                 .collect(Collectors.toList());
 
         return categoryDtos;
+    }
+
+    @Override
+    public ResponseEntity delete(Long categoryId) {
+        Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
+        if(!optionalCategory.isPresent()) {
+            throw new IllegalStateException("카테고리가 존재하지 않습니다.");
+        } else {
+            categoryRepository.deleteById(categoryId);
+        }
+
+        return ResponseEntity.ok().body("삭제 완료");
     }
 
 

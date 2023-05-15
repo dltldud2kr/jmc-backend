@@ -15,3 +15,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .maxAge(3000);        // 최대 캐싱 시간 3000초
     }
 }
+
+

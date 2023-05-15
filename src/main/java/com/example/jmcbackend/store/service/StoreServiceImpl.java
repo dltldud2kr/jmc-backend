@@ -8,7 +8,7 @@ import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
 import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.repository.StoreRepository;
-import com.example.jmcbackend.storeLike.repository.StoreLikeRepository;
+import com.example.jmcbackend.storeLike.repository.StoreLikesRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,7 +30,7 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
-    private final StoreLikeRepository storeLikeRepository;
+    private final StoreLikesRepository storeLikesRepository;
 
 
     @Override
@@ -44,12 +44,12 @@ public class StoreServiceImpl implements StoreService {
         Store store = Store.builder()
                     .storeName(parameter.getStoreName())
                     .userId(userId)
-                    .storeIntroduction(parameter.getStoreIntroduction())
-                    .storeOpeningDateAndHours(parameter.getStoreOpeningDateAndHours())
+                    .introduction(parameter.getIntroduction())
+                    .openTime(parameter.getOpenTime())
                     .categoryId(parameter.getCategoryId())
-                    .storeAddress(parameter.getStoreAddress())
-                    .storeUrl(parameter.getStoreUrl())
-                    .storePhone(parameter.getStorePhone())
+                    .address(parameter.getAddress())
+                    .url(parameter.getUrl())
+                    .phone(parameter.getPhone())
                     .storeCreated(LocalDateTime.now())
                     .build();
 
@@ -97,7 +97,7 @@ public class StoreServiceImpl implements StoreService {
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 가게입니다."));
 
         Long reviewCount = reviewRepository.countByStoreId(storeId);
-        Long likeCount = storeLikeRepository.countByStoreId(storeId);
+        Long likeCount = storeLikesRepository.countByStoreId(storeId);
 
         //리뷰점수 소수점 첫째자리까지
         Float reviewAvg = reviewRepository.reviewScoreAvg(storeId);
@@ -105,15 +105,15 @@ public class StoreServiceImpl implements StoreService {
             StoreDto dto = StoreDto.builder()
                 .storeId(storeInfo.getStoreId())
                 .categoryId(storeInfo.getCategoryId())
-                .storeIntroduction(storeInfo.getStoreIntroduction())
+                .introduction(storeInfo.getIntroduction())
                 .storeName(storeInfo.getStoreName())
-                .storeAddress(storeInfo.getStoreAddress())
-                .storeUrl(storeInfo.getStoreUrl())
+                .address(storeInfo.getAddress())
+                .url(storeInfo.getUrl())
                 .storeReviewCount(reviewCount)
                 .storeLikeCount(likeCount)
                     .reviewAvg(reviewAvg)
-                .storePhone(storeInfo.getStorePhone())
-                .storeOpeningDateAndHours(storeInfo.getStoreOpeningDateAndHours())
+                .phone(storeInfo.getPhone())
+                .openTime(storeInfo.getOpenTime())
                 .build();
         return dto;
     }
@@ -154,11 +154,11 @@ public class StoreServiceImpl implements StoreService {
         }
         log.info("dto로 받은 값을 entity로 옮김");
             store.setStoreName(dto.getStoreName());
-            store.setStoreUrl(dto.getStoreUrl());
-            store.setStoreAddress(dto.getStoreAddress());
-            store.setStorePhone(dto.getStorePhone());
-            store.setStoreIntroduction(dto.getStoreIntroduction());
-            store.setStoreOpeningDateAndHours(dto.getStoreOpeningDateAndHours());
+            store.setUrl(dto.getUrl());
+            store.setAddress(dto.getAddress());
+            store.setPhone(dto.getPhone());
+            store.setIntroduction(dto.getIntroduction());
+            store.setOpenTime(dto.getOpenTime());
             store.setCategoryId(dto.getCategoryId());
             store.setStoreUpdated(LocalDateTime.now());
 
@@ -189,22 +189,22 @@ public class StoreServiceImpl implements StoreService {
     public  StoreDto of(Store store){
 
         Long reviewCount = reviewRepository.countByStoreId(store.getStoreId());
-        Long likeCount = storeLikeRepository.countByStoreId(store.getStoreId());
+        Long likeCount = storeLikesRepository.countByStoreId(store.getStoreId());
         Float reviewAvg = reviewRepository.reviewScoreAvg(store.getStoreId());
 
 
         return StoreDto.builder()
                 .storeId(store.getStoreId())
                 .categoryId(store.getCategoryId())
-                .storeIntroduction(store.getStoreIntroduction())
+                .introduction(store.getIntroduction())
                 .storeName(store.getStoreName())
-                .storeAddress(store.getStoreAddress())
-                .storeUrl(store.getStoreUrl())
+                .address(store.getAddress())
+                .url(store.getUrl())
                 .storeReviewCount(reviewCount)
                 .storeLikeCount(likeCount)
                 .reviewAvg(reviewAvg)
-                .storePhone(store.getStorePhone())
-                .storeOpeningDateAndHours(store.getStoreOpeningDateAndHours())
+                .phone(store.getPhone())
+                .openTime(store.getOpenTime())
                 .build();
     }
 

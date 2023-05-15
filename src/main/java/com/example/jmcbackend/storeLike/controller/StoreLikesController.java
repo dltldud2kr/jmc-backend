@@ -1,43 +1,42 @@
 package com.example.jmcbackend.storeLike.controller;
 
 
-import com.example.jmcbackend.store.entity.Store;
-import com.example.jmcbackend.storeLike.dto.StoreLikeDto;
-import com.example.jmcbackend.storeLike.entity.StoreLike;
-import com.example.jmcbackend.storeLike.service.StoreLikeService;
+import com.example.jmcbackend.storeLike.dto.StoreLikesDto;
+import com.example.jmcbackend.storeLike.service.StoreLikesService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/like")
-public class StoreLikeController {
+public class StoreLikesController {
 
-    private final StoreLikeService storeLikeService;
+    private final StoreLikesService storeLikesService;
 
     @PostMapping("/add/storeId/{storeId}")
     public ResponseEntity add(Principal principal ,@PathVariable("storeId") Long storeId) {
 
         String userId = principal.getName();
-        ResponseEntity result = storeLikeService.add(userId, storeId);
+        ResponseEntity result = storeLikesService.add(userId, storeId);
 
 
         return ResponseEntity.ok(result);
 
     }
 
+    /**
+     * 사용자 좋아요 가게 목록
+     */
     @GetMapping("/myLikeStore")
     public ResponseEntity myLikeList(Principal principal, Pageable pageable) {
 
         String userId = principal.getName();
-        Page<StoreLikeDto> storeLikes =storeLikeService.myLikeList(userId, pageable);
+        Page<StoreLikesDto> storeLikes = storeLikesService.myLikeList(userId, pageable);
 
         return ResponseEntity.ok(storeLikes);
 

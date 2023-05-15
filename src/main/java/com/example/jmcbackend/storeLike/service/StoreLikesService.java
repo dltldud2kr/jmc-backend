@@ -1,16 +1,13 @@
 package com.example.jmcbackend.storeLike.service;
 
-import com.example.jmcbackend.storeLike.dto.StoreLikeDto;
-import com.example.jmcbackend.storeLike.entity.StoreLike;
+import com.example.jmcbackend.storeLike.dto.StoreLikesDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public interface StoreLikeService {
+public interface StoreLikesService {
     /**
      * 좋아요 누른 가게
      */
@@ -21,5 +18,5 @@ public interface StoreLikeService {
      * @param userId
      * @return
      */
-    Page<StoreLikeDto> myLikeList(String userId, Pageable pageable);
+    Page<StoreLikesDto> myLikeList(String userId, Pageable pageable);
 }

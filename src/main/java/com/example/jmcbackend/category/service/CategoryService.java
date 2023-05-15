@@ -5,6 +5,7 @@ import com.example.jmcbackend.category.entity.Category;
 import com.example.jmcbackend.store.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,5 +23,10 @@ public interface CategoryService {
      */
     List<CategoryDto> getAllCategories ();
 
+    /**
+     * 카테고리 삭제 ( 사용자 권한을 부여하지 않은 삭제 )
+     */
+
+    ResponseEntity delete (Long categoryId);
 
 }

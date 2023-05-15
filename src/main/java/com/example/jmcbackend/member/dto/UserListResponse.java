@@ -14,6 +14,6 @@ import java.time.LocalDateTime;
 public class UserListResponse {
     private String userId;
     private String userName;
-    private String userNickname;
+    private String nickname;
     private LocalDateTime regDt;
 }

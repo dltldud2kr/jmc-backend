@@ -1,7 +1,5 @@
 package com.example.jmcbackend.storeLike.entity;
 
-import com.example.jmcbackend.member.entity.User;
-import com.example.jmcbackend.store.entity.Store;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +10,7 @@ import javax.persistence.*;
 @Builder
 @Getter
 @Setter
-public class StoreLike {
+public class StoreLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

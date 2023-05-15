@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 public class StoreEditDto {
 
     private String storeName;
-    private String storeUrl;
-    private String storeAddress;
-    private String storePhone;
-    private String storeIntroduction;
-    private String storeOpeningDateAndHours;
+    private String url;
+    private String address;
+    private String phone;
+    private String introduction;
+    private String openTime;
     private Long categoryId;
     private LocalDateTime StoreUpdated;
 }

@@ -6,8 +6,8 @@ import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.review.service.ReviewService;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.service.StoreService;
-import com.example.jmcbackend.storeLike.repository.StoreLikeRepository;
-import com.example.jmcbackend.storeLike.service.StoreLikeService;
+import com.example.jmcbackend.storeLike.repository.StoreLikesRepository;
+import com.example.jmcbackend.storeLike.service.StoreLikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +21,11 @@ public class RestaurantFinderController {
 
     private final StoreService storeService;
     private final ReviewService reviewService;
-    private final StoreLikeService storeLikeService;
+    private final StoreLikesService storeLikesService;
     private final ReviewRepository reviewRepository;
     private final CategoryService categoryService;
-    private final StoreLikeRepository storeLikeRepository;
+    private final StoreLikesRepository storeLikesRepository;
+
 
     @GetMapping("/store")
     public ResponseEntity<Page<MainDto>> mainStore(Pageable pageable){
@@ -34,11 +35,11 @@ public class RestaurantFinderController {
         Page<MainDto> mainDtos = allStore.map(store ->{
             Long reviewCount = reviewRepository.countByStoreId(store.getStoreId());
             Float reviewAvg = reviewRepository.reviewScoreAvg(store.getStoreId());
-            Long likeCount = storeLikeRepository.countByStoreId(store.getStoreId());
+            Long likeCount = storeLikesRepository.countByStoreId(store.getStoreId());
 
             return MainDto.builder()
                     .storeName(store.getStoreName())
-                    .storeAddress(store.getStoreAddress())
+                    .address(store.getAddress())
                     .likeCount(likeCount)
                     .reviewAvg(reviewAvg)
                     .reviewCount(reviewCount)

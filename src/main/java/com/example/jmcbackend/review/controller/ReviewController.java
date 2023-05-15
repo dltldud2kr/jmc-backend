@@ -29,7 +29,12 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
-
+    /**
+     * 이건 userController로 옮길것
+     * @param principal
+     * @param pageable
+     * @return
+     */
 
     @GetMapping("/myReviewList")
     public ResponseEntity myReviewList(Principal principal, Pageable pageable) {
@@ -38,6 +43,24 @@ public class ReviewController {
         Page<ReviewDto> reviews = reviewService.myReviewList(userId, pageable);
 
         return ResponseEntity.ok(reviews);
+    }
+
+    @DeleteMapping("/{reviewId}/reviewEdit")
+    public ResponseEntity delReview(Principal principal, @PathVariable("reviewId") Long reviewId) {
+
+        String userId = principal.getName();
+        ResponseEntity result = reviewService.del(reviewId,userId);
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/{reviewId}/reviewEdit")
+    public ResponseEntity reviewEdit(@PathVariable("reviewId")Long reviewId, Principal principal, @RequestBody ReviewDto dto) {
+        String userId = principal.getName();
+
+        ResponseEntity result = reviewService.modify(userId,reviewId,dto);
+
+        return ResponseEntity.ok(result);
     }
 
 

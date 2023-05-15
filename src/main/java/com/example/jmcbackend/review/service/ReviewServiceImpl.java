@@ -73,7 +73,7 @@ public class ReviewServiceImpl implements ReviewService{
 
         review.setReviewScore(dto.getReviewScore());
         review.setReviewText(dto.getReviewText());
-        review.setReviewUpdated(LocalDateTime.now());
+//        review.setReviewUpdated(LocalDateTime.now());
 
         reviewRepository.save(review);
 

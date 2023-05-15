@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Id;
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -23,12 +20,12 @@ public class StoreInfoParam {
 
     private Long categoryId;
 
-    private String storePhone;
-    private String storeAddress;
-    private String storeUrl;
+    private String phone;
+    private String address;
+    private String url;
 
-    private String storeOpeningDateAndHours;    //
-    private String storeIntroduction;
+    private String openTime;    //
+    private String introduction;
 
     private String userId;
 

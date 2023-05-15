@@ -1,5 +1,6 @@
 package com.example.jmcbackend.store.controller;
 
+import com.example.jmcbackend.member.dto.StoreEditDto;
 import com.example.jmcbackend.review.dto.ReviewDto;
 import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.service.ReviewService;
@@ -58,7 +59,7 @@ public class StoreController {
 
 
     /**
-     * 지정 카테고리 가게 목록
+     * 지정 카테고리 가게 목록    카테고리Controller로 옮길것
      */
     @GetMapping("/categoryId/{categoryId}")
     public ResponseEntity categoryStoreList(@PathVariable("categoryId") Long categoryId){
@@ -80,6 +81,12 @@ public class StoreController {
         return ResponseEntity.ok(search);
     }
 
+    /**
+     * 특정 가게 리뷰 리스트
+     * @param storeId
+     * @param pageable
+     * @return
+     */
     @GetMapping("/{storeId}/reviewList")
     public ResponseEntity storeReviewList(@PathVariable("storeId") Long storeId, Pageable pageable) {
 
@@ -88,4 +95,41 @@ public class StoreController {
         return ResponseEntity.ok(reviews);
     }
 
+
+    /**
+     * 사용자 등록 가게 리스트
+     */
+
+    @GetMapping("/storeEdit")
+    public ResponseEntity myStoreList(Principal principal){
+
+        String userId = principal.getName();
+        List<StoreDto> storeList = storeService.myStoreList(userId);
+
+        return ResponseEntity.ok(storeList);
+    }
+
+
+
+
+    /**
+     * 사용자가 등록한 가게 수정
+     */
+    @PostMapping("/{storeId}/storeEdit")
+    public ResponseEntity storeEdit(@PathVariable("storeId") Long storeId, Principal principal, @RequestBody StoreEditDto dto){
+        String userId = principal.getName();
+
+        ResponseEntity result = storeService.modify(userId,storeId,dto);
+
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/{storeId}/storeEdit")
+    public ResponseEntity storeDelete (@PathVariable("storeId") Long storeId ,Principal principal) {
+        String userId = principal.getName();
+
+        storeService.deleteStore(storeId,userId);
+
+        return ResponseEntity.ok("삭제완료");
+    }
 }

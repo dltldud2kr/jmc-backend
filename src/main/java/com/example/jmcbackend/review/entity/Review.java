@@ -25,7 +25,7 @@ public class Review {
     private String reviewText;
 
     private LocalDateTime reviewCreated;
-    private LocalDateTime reviewUpdated;
+//    private LocalDateTime reviewUpdated;
 
 
 }

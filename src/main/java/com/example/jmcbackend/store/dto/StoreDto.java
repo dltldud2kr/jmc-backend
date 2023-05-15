@@ -22,13 +22,13 @@ public class StoreDto {
 
         private Long categoryId;
 
-        private String storePhone;
-        private String storeAddress;
-        private String storeUrl;
+        private String phone;
+        private String address;
+        private String url;
         private String userId;
 
-        private String storeOpeningDateAndHours;    //
-        private String storeIntroduction;
+        private String openTime;    //
+        private String introduction;
         private Float reviewAvg;        //소수점 1자리수까지
 
 
