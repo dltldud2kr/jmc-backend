@@ -26,7 +26,7 @@ public class StoreController {
     private final ReviewService reviewService;
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody StoreInfoParam parameter ,Principal principal) {
+    public ResponseEntity register(@RequestBody StoreInfoParam parameter , Principal principal) {
 
             String userId = principal.getName();
             Store result = storeService.register(parameter,userId);

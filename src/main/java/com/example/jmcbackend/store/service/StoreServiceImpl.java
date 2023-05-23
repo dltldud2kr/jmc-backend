@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class StoreServiceImpl implements StoreService {
 
 
     @Override
-    public Store register(StoreInfoParam parameter, String userId) {
+    public Store register(StoreInfoParam parameter,  String userId) {
 
         storeRepository.findByStoreName(parameter.getStoreName())
                 .ifPresent(store -> {
@@ -53,7 +54,7 @@ public class StoreServiceImpl implements StoreService {
                     .storeCreated(LocalDateTime.now())
                     .build();
 
-            storeRepository.save(store);
+        storeRepository.save(store);
 
         return store;
     }
@@ -64,6 +65,8 @@ public class StoreServiceImpl implements StoreService {
 
         if (store.isPresent() && store.get().getUserId().equals(userId)) {
             store.ifPresent(storeRepository::delete);
+
+
             return ResponseEntity.ok().body("삭제완료");
         } else {
             throw new IllegalStateException("가게 삭제 오류");

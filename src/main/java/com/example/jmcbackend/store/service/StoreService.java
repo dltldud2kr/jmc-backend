@@ -16,7 +16,7 @@ public interface StoreService {
     /**
      * 가게 등록
      */
-    Store register(StoreInfoParam parameter, String userId);
+    Store register(StoreInfoParam parameter,  String userId);
 
     /**
      * 가게 삭제

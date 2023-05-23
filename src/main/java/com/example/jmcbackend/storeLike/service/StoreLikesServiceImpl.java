@@ -37,7 +37,7 @@ public class StoreLikesServiceImpl implements StoreLikesService {
         Optional<StoreLikes> byUserIdAndStoreId = storeLikesRepository.findByUserIdAndStoreId(userId, storeId);
 
 
-        StoreLikes storeLikes = com.example.jmcbackend.storeLike.entity.StoreLikes.builder()
+        StoreLikes storeLikes = StoreLikes.builder()
                 .storeId(storeId)
                 .userId(userId)
                 .build();

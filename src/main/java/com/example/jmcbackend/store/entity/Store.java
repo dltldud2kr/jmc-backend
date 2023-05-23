@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -21,17 +22,21 @@ public class Store {
 
     private Long categoryId;
 
+
+
     private String phone;
     private String address;
     private String url;
 
 
-    private String openTime;    //
+    private String openTime;
     private String introduction;
     private String userId;
 
     private LocalDateTime storeCreated;
     private LocalDateTime storeUpdated;
+
+
 
 
 }

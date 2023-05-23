@@ -27,14 +27,17 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Review add(ReviewDto dto , String userId, Long storeId) {
-        String storeName = storeRepository.findById(storeId).get().getStoreName();
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("Store not found"));
 
+        if (store.getUserId().equals(userId)){
+            throw new IllegalArgumentException("User does not have permission to add a review for this store");
+        }
 
         Review review = Review.builder()
                 .userId(userId)
                 .storeId(storeId)
                 .reviewScore(dto.getReviewScore())
-                .storeName(storeName)
+                .storeName(store.getStoreName())
                 .reviewText(dto.getReviewText())
                 .reviewCreated(LocalDateTime.now())
                 .build();

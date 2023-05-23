@@ -29,21 +29,6 @@ public class ReviewController {
         return ResponseEntity.ok(result);
     }
 
-    /**
-     * 이건 userController로 옮길것
-     * @param principal
-     * @param pageable
-     * @return
-     */
-
-    @GetMapping("/myReviewList")
-    public ResponseEntity myReviewList(Principal principal, Pageable pageable) {
-        String userId = principal.getName();
-
-        Page<ReviewDto> reviews = reviewService.myReviewList(userId, pageable);
-
-        return ResponseEntity.ok(reviews);
-    }
 
     @DeleteMapping("/{reviewId}/reviewEdit")
     public ResponseEntity delReview(Principal principal, @PathVariable("reviewId") Long reviewId) {

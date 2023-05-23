@@ -59,7 +59,29 @@ public class JwtFilter extends OncePerRequestFilter {
             // Detail 넣기
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            filterChain.doFilter(request,response);
+//            filterChain.doFilter(request,response);
+
+
+            // 로그아웃 요청 처리
+            boolean isLogoutRequest = request.getRequestURI().equals("/api/v1/users/logout");
+            if (isLogoutRequest) {
+                JwtBlacklist.addToBlacklist(token);
+                filterChain.doFilter(request, response);
+                return ;
+            }
+
+
+            boolean isBlacklisted = JwtBlacklist.isBlacklisted(token);
+            if (isBlacklisted) {
+                JwtBlacklist.invalidateToken(token); // 토큰을 무효화하는 작업
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("토큰이 블랙리스트에 포함되어 있습니다.");
+                return;
+            }
+
+            filterChain.doFilter(request, response);
+
 
             //try catch 추가 ( 이부분 )
         } catch (JwtException e) {

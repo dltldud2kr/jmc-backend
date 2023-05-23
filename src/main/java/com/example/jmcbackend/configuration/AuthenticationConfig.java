@@ -30,33 +30,17 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/users/join", "/api/v1/users/login","/api/v1/users/logout"
-                        ,"/store/**","/category/**").permitAll()
+                .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll()
+                .antMatchers("/category/list").permitAll()
+                .antMatchers(HttpMethod.GET,"/store/list").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/store/register","/create/review"
-                        ,"/category/add", "/store/delete","/api/v1/reviews/myReviewList").authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 사용하는 경우 씀
                 .and()
                 .addFilterBefore(new JwtFilter(userServiceImpl, secretKey), UsernamePasswordAuthenticationFilter.class)
-                //여기
-                .logout()
-                .logoutUrl("/api/v1/users/logout") // 로그아웃 API 경로
-                .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/users/logout", "POST")) // 로그아웃 API 경로
 
-                .logoutSuccessHandler((req, res, auth) -> {
-                    // JWT 토큰을 무효화
-                    String token = req.getHeader("Authorization");
-                    if (token != null && token.startsWith("Bearer ")) {
-                        token = token.substring(7);
-                        // 토큰을 무효화할 작업 수행
-                    }
-                })
-                .deleteCookies("jwt") // 쿠키 삭제
-                .permitAll()
-                .and()
-                //여기
                 .build();
     }
 }

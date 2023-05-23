@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService{
             throw new AppException(ErrorCode.INVALID_PASSWORD, "wrong password");
         }
 
+
         String token = JwtUtil.createJwt(selectedUser.getUserId(), secretKey, expiredTimeMs);
 
         // Exception 안 났을 때 토큰 발행
