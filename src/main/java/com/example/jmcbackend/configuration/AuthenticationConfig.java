@@ -31,16 +31,30 @@ public class AuthenticationConfig {
                 .cors().and()
                 .authorizeRequests()
                 .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll()
-                .antMatchers("/category/list").permitAll()
-                .antMatchers(HttpMethod.GET,"/store/list").permitAll()
+                .antMatchers("/category/list").permitAll()  // 카테고리 목록
+                .antMatchers(HttpMethod.GET,"/store/list").permitAll()  // 가게 목록
+                .antMatchers("/store").permitAll()  // 메인 프론트
+                .antMatchers("/store/search**").permitAll() // 가게 검색 기능
 
                 .anyRequest().authenticated()
+
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 사용하는 경우 씀
                 .and()
                 .addFilterBefore(new JwtFilter(userServiceImpl, secretKey), UsernamePasswordAuthenticationFilter.class)
 
+                // 로그인 되지 않은 사용자가 페이지 접근 시 넘어가는 페이지.
+//                .formLogin()
+//                .loginPage("/api/v1/users/login")
+//                .permitAll()
+//                .and()
+
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/users/logout"))
+                .logoutSuccessUrl("/store")
+                .invalidateHttpSession(true)    // 세션 무효화
+                .and()
                 .build();
     }
 }

@@ -35,8 +35,10 @@ import java.util.Set;
 public class UserController {
 
     private final UserService userService;
-    private final StoreLikesService storeLikesService;
     private final ReviewService reviewService;
+
+    private final StoreLikesService storeLikesService;
+
 
     @PostMapping("/join")
     public ResponseEntity join(@RequestBody UserJoinRequest dto) {
@@ -82,9 +84,7 @@ public class UserController {
     public ResponseEntity<String> logout(HttpServletRequest request) {
         System.out.println("테스트");
         // 로그아웃 요청 처리
-        log.info("logout");
         String token = extractTokenFromRequest(request);
-        log.info("extractTokenFromRequest");
         if (token != null) {
             JwtBlacklist.addToBlacklist(token);
             log.info("블랙리스트에 추가되었습니다.");
@@ -102,31 +102,6 @@ public class UserController {
         }
         return null;
     }
-
-
-//    @PostMapping("/logout")
-//    public ResponseEntity<String> logout(HttpServletRequest request) {
-//        // JWT 토큰을 무효화
-//        String token = request.getHeader("Authorization");
-//        if (token != null && token.startsWith("Bearer ")) {
-//            token = token.substring(7);
-//            // 토큰을 무효화할 작업 수행
-//            // 예를 들어, 토큰 블랙리스트에 추가하거나, 세션을 만료시키는 등의 작업을 수행할 수 있습니다.
-//        }
-//
-//        // 로그아웃 후 동작 또는 응답 처리
-//        return ResponseEntity.ok("Logged out successfully");
-//    }
-
-
-//    @PostMapping("/logout")
-//    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null) {
-//            new SecurityContextLogoutHandler().logout(request, response, authentication);
-//        }
-//        return ResponseEntity.ok().body("로그아웃 되었습니다.");
-//    }
 
 
 
@@ -147,4 +122,19 @@ public class UserController {
 
         return ResponseEntity.ok(reviews);
     }
+
+    /**
+     * 내 좋아요 가게 목록
+     */
+    @GetMapping("/myLikeList")
+    public ResponseEntity storeLikeList(Principal principal, Pageable pageable){
+        String userId = principal.getName();
+        Page<StoreLikesDto> storeLikeList = storeLikesService.myLikeList(userId, pageable);
+
+        return ResponseEntity.ok(storeLikeList);
+    }
+
+
+
+
 }

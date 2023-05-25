@@ -1,4 +1,4 @@
-package com.example.jmcbackend.dailyStore;
+package com.example.jmcbackend.dailyStore.entity;
 
 import com.example.jmcbackend.store.entity.Store;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.example.jmcbackend.dailyStore;
+package com.example.jmcbackend.dailyStore.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

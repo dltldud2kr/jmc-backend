@@ -1,19 +1,17 @@
-package com.example.jmcbackend.dailyStore;
+package com.example.jmcbackend.dailyStore.service;
 
+import com.example.jmcbackend.dailyStore.dto.DailyStoreDto;
+import com.example.jmcbackend.dailyStore.entity.DailyStore;
+import com.example.jmcbackend.dailyStore.repository.DailyStoreRepository;
 import com.example.jmcbackend.review.repository.ReviewRepository;
-import com.example.jmcbackend.review.service.ReviewService;
 import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.repository.StoreRepository;
 import com.example.jmcbackend.storeLike.repository.StoreLikesRepository;
-import com.example.jmcbackend.storeLike.service.StoreLikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +30,7 @@ public class DailyStoreService {
         // 기존 추천 음식점 데이터 삭제
         dailyStoreRepository.deleteAll();
 
-        // 새로운 추천 음식점 생성 및 저장 로직 구현
+        // 새로운 추천 음식점 생성 및 저장 로직 구현  -> storeRepository @Query 참고
         Page<Store> result = storeRepository.findTop5StoresWithReviewAndLikeCounts(PageRequest.of(0,5));
         List<DailyStore> dailyStores = new ArrayList<>();
         List<DailyStoreDto> dto = new ArrayList<>();
@@ -65,15 +63,6 @@ public class DailyStoreService {
         return dto;
     }
 
-    public ResponseEntity test (DailyStoreDto dto) {
-        DailyStore dailyStore = new DailyStore();
 
-        dailyStore.setStoreName(dto.getStoreName());
-
-        dailyStoreRepository.save(dailyStore);
-
-
-        return ResponseEntity.ok(dailyStore);
-    }
 
 }
