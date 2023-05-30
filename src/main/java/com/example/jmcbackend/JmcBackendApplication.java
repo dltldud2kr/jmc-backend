@@ -3,7 +3,7 @@ package com.example.jmcbackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-//dddd
+//ddddㅇㄹㅇㄹ
 @SpringBootApplication
 public class JmcBackendApplication {
 
