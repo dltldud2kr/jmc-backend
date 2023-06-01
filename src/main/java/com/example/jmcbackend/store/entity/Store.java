@@ -1,5 +1,6 @@
 package com.example.jmcbackend.store.entity;
 
+import com.example.jmcbackend.regionFilter._enum.CityEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,6 +29,9 @@ public class Store {
     private String address;
     private String url;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private CityEnum regionEnum;
 
     private String openTime;
     private String introduction;
