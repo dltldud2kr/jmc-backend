@@ -40,7 +40,7 @@ public class StoreController {
     @GetMapping("/list")
     public ResponseEntity list (Pageable pageable){
 
-        Page<StoreDto> stores =storeService.getAllStore(pageable);
+        Page<StoreDto> stores = storeService.getAllStore(pageable);
 
         return ResponseEntity.ok(stores);
     }
@@ -58,6 +58,8 @@ public class StoreController {
     }
 
 
+
+
     /**
      * 지정 카테고리 가게 목록    카테고리Controller로 옮길것
      */
@@ -66,6 +68,17 @@ public class StoreController {
 
         List<Store> stores = storeService.getCategoryStoreList(categoryId);
 
+        return ResponseEntity.ok(stores);
+    }
+
+    /**
+     * @title 지역별 음식점 리스트 받아오기
+     * @param regionCode : 지역 리전 코드
+     * @return
+     */
+    @GetMapping("/region")
+    public ResponseEntity regionStoreList(@RequestParam(value="id",defaultValue="all") String regionCode) {
+        List<Store> stores = storeService.getRegionStoreList(regionCode);
         return ResponseEntity.ok(stores);
     }
 

@@ -31,7 +31,7 @@ public class Store {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private CityEnum regionEnum;
+    private CityEnum regionCode;
 
     private String openTime;
     private String introduction;

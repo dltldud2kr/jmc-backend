@@ -47,6 +47,11 @@ public interface StoreService {
     List<Store> getCategoryStoreList(Long categoryId);
 
     /**
+     * 리전 카테고리 리스트
+     */
+    List<Store> getRegionStoreList(String regionCode);
+
+    /**
      * 가게 검색 기능
      */
     List<Store> search(String keyword);

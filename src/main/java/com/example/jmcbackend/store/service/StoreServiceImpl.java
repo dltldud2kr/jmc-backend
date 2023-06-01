@@ -139,6 +139,15 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public List<Store> getRegionStoreList(String regionCode) {
+        if(regionCode.equals("all")) {
+            return storeRepository.findAll();
+        } else {
+            return storeRepository.findAllByRegionCode(regionCode);
+        }
+    }
+
+    @Override
     public List<Store> search(String keyword) {
 
         return storeRepository.findByStoreNameContaining(keyword);

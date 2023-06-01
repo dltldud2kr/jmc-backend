@@ -22,6 +22,8 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findByUserId(String userId);
 
+    List<Store> findAllByRegionCode(String regionCode);
+
 
     @Query("SELECT s " +
             "FROM Store s " +
