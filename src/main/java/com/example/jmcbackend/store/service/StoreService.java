@@ -2,6 +2,7 @@ package com.example.jmcbackend.store.service;
 import com.example.jmcbackend.member.dto.StoreEditDto;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
+import com.example.jmcbackend.store.dto.StoreSimpleListRes;
 import com.example.jmcbackend.store.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +50,7 @@ public interface StoreService {
     /**
      * 리전 카테고리 리스트
      */
-    List<Store> getRegionStoreList(String regionCode);
+    List<StoreSimpleListRes> getRegionStoreList(String regionCode);
 
     /**
      * 가게 검색 기능

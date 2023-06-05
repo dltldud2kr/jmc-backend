@@ -6,6 +6,7 @@ import com.example.jmcbackend.member.dto.StoreEditDto;
 import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
+import com.example.jmcbackend.store.dto.StoreSimpleListRes;
 import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.repository.StoreRepository;
 import com.example.jmcbackend.storeLike.repository.StoreLikesRepository;
@@ -139,9 +140,25 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public List<Store> getRegionStoreList(String regionCode) {
+    public List<StoreSimpleListRes> getRegionStoreList(String regionCode) {
         if(regionCode.equals("all")) {
-            return storeRepository.findAll();
+            List<Store> storeList = storeRepository.findAll();
+            List<StoreSimpleListRes> simpleStoreList = new ArrayList<>();
+
+
+            for (Store store : storeList) {
+
+                StoreSimpleListRes dto = new StoreSimpleListRes();
+                dto.fromEntity(store);
+                simpleStoreList.add(dto);
+
+            }
+
+            return simpleStoreList;
+
+
+//            return storeList;
+//            return storeRepository.findAll();
         } else {
             return storeRepository.findAllByRegionCode(regionCode);
         }

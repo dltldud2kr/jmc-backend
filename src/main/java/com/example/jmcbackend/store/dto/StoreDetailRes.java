@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class StoreDto {
+public class StoreDetailRes {
         private Long storeId;
         private String storeName;
         private Long storeLikeCount;

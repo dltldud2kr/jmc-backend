@@ -1,5 +1,6 @@
 package com.example.jmcbackend.store.repository;
 
+import com.example.jmcbackend.store.dto.StoreSimpleListRes;
 import com.example.jmcbackend.store.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findByUserId(String userId);
 
-    List<Store> findAllByRegionCode(String regionCode);
+    List<StoreSimpleListRes> findAllByRegionCode(String regionCode);
 
 
     @Query("SELECT s " +

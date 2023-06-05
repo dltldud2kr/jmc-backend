@@ -20,23 +20,16 @@ public class Store {
     private Long storeId;
 
     private String storeName;
-
     private Long categoryId;
-
-
-
     private String phone;
     private String address;
     private String url;
-
     @Column
     @Enumerated(EnumType.STRING)
     private CityEnum regionCode;
-
     private String openTime;
     private String introduction;
     private String userId;
-
     private LocalDateTime storeCreated;
     private LocalDateTime storeUpdated;
 
