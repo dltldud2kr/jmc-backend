@@ -27,6 +27,12 @@ public class RestaurantFinderController {
     private final StoreLikesRepository storeLikesRepository;
 
 
+    /**
+     * 나중에 StoreController에 합칠 예정.
+     * @param pageable
+     * @return
+     */
+
     @GetMapping("/store")
     public ResponseEntity<Page<MainDto>> mainStore(Pageable pageable){
 
@@ -38,11 +44,21 @@ public class RestaurantFinderController {
             Long likeCount = storeLikesRepository.countByStoreId(store.getStoreId());
 
             return MainDto.builder()
+                    .storeId(store.getStoreId())
+                    .categoryId(store.getCategoryId())
+                    .contactNumber(store.getContactNumber())
+//                    .thumbnailImg()
+                    .openTime(store.getOpenTime())
+                    .introduction(store.getIntroduction())
+                    .userId(store.getUserId())
+                    .regionCode(store.getRegionCode())
                     .storeName(store.getStoreName())
                     .address(store.getAddress())
-                    .likeCount(likeCount)
+                    .storeCreated(store.getStoreCreated())
+                    .storeUpdated(store.getStoreUpdated())
+                    .storeLikeCount(likeCount)
                     .reviewAvg(reviewAvg)
-                    .reviewCount(reviewCount)
+                    .storeReviewCount(reviewCount)
                     .build();
         });
 

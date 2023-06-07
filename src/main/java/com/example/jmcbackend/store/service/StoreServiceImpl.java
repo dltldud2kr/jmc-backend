@@ -3,6 +3,7 @@ package com.example.jmcbackend.store.service;
 import com.example.jmcbackend.exception.AppException;
 import com.example.jmcbackend.exception.ErrorCode;
 import com.example.jmcbackend.member.dto.StoreEditDto;
+import com.example.jmcbackend.regionFilter._enum.CityEnum;
 import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
@@ -50,6 +51,7 @@ public class StoreServiceImpl implements StoreService {
                     .openTime(parameter.getOpenTime())
                     .categoryId(parameter.getCategoryId())
                     .address(parameter.getAddress())
+                .regionCode(parameter.getRegionCode())
                     .url(parameter.getUrl())
                     .phone(parameter.getPhone())
                     .storeCreated(LocalDateTime.now())
@@ -116,7 +118,8 @@ public class StoreServiceImpl implements StoreService {
                 .storeReviewCount(reviewCount)
                 .storeLikeCount(likeCount)
                     .reviewAvg(reviewAvg)
-                .phone(storeInfo.getPhone())
+                    .regionCode(storeInfo.getRegionCode())
+                .contactNumber(storeInfo.getPhone())
                 .openTime(storeInfo.getOpenTime())
                 .build();
         return dto;
@@ -139,6 +142,7 @@ public class StoreServiceImpl implements StoreService {
         return storeRepository.findAllByCategoryId(categoryId);
     }
 
+    /*
     @Override
     public List<StoreSimpleListRes> getRegionStoreList(String regionCode) {
         if(regionCode.equals("all")) {
@@ -161,6 +165,23 @@ public class StoreServiceImpl implements StoreService {
 //            return storeRepository.findAll();
         } else {
             return storeRepository.findAllByRegionCode(regionCode);
+        }
+    }
+
+     */
+
+    @Override
+    public Page<StoreDto> getRegionStoreList2(CityEnum regionCode, Pageable pageable) {
+        if (regionCode.equals("all")) {
+            Page<Store> regionAllStore = storeRepository.findAll(pageable);
+            List<StoreDto> allStoreDtoList = of(regionAllStore.getContent());
+
+            return new PageImpl<>(allStoreDtoList, pageable, regionAllStore.getTotalElements());
+        } else {
+            Page<Store> regionFilterStore = storeRepository.findAllByRegionCode(regionCode , pageable);
+            List<StoreDto> regionStoreDtoList = of(regionFilterStore.getContent());
+
+            return new PageImpl<>(regionStoreDtoList, pageable, regionFilterStore.getTotalElements());
         }
     }
 
@@ -201,6 +222,7 @@ public class StoreServiceImpl implements StoreService {
 
 
 
+
     public  List<StoreDto> of (List<Store> stores) {
 
         if (stores == null) {
@@ -224,15 +246,18 @@ public class StoreServiceImpl implements StoreService {
 
         return StoreDto.builder()
                 .storeId(store.getStoreId())
+                .userId(store.getUserId())
+                .regionCode(store.getRegionCode())
                 .categoryId(store.getCategoryId())
                 .introduction(store.getIntroduction())
                 .storeName(store.getStoreName())
                 .address(store.getAddress())
-                .url(store.getUrl())
                 .storeReviewCount(reviewCount)
                 .storeLikeCount(likeCount)
                 .reviewAvg(reviewAvg)
-                .phone(store.getPhone())
+                .storeUpdated(store.getStoreUpdated())
+                .storeCreated(store.getStoreCreated())
+                .contactNumber(store.getPhone())
                 .openTime(store.getOpenTime())
                 .build();
     }

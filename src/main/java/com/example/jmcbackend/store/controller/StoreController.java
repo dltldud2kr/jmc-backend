@@ -1,6 +1,7 @@
 package com.example.jmcbackend.store.controller;
 
 import com.example.jmcbackend.member.dto.StoreEditDto;
+import com.example.jmcbackend.regionFilter._enum.CityEnum;
 import com.example.jmcbackend.review.dto.ReviewDto;
 import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.service.ReviewService;
@@ -27,7 +28,8 @@ public class StoreController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody StoreInfoParam parameter , Principal principal) {
-
+//        CityEnum regionCode = CityEnum.valueOf(parameter.getRegionCode().name());
+//        parameter.setRegionCode(regionCode);
             String userId = principal.getName();
             Store result = storeService.register(parameter,userId);
 
@@ -77,8 +79,12 @@ public class StoreController {
      * @return
      */
     @GetMapping("/region")
-    public ResponseEntity regionStoreList(@RequestParam(value="id",defaultValue="all") String regionCode) {
-        List<Store> stores = storeService.getRegionStoreList(regionCode);
+    public ResponseEntity regionStoreList(@RequestParam(value="id",defaultValue="all") CityEnum regionCode , Pageable pageable) {
+//        List<Store> stores = storeService.getRegionStoreList(regionCode);
+////        return ResponseEntity.ok(stores);
+
+        Page<StoreDto> stores = storeService.getRegionStoreList2(regionCode,pageable);
+
         return ResponseEntity.ok(stores);
     }
 

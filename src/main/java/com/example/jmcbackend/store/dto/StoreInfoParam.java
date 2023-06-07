@@ -1,5 +1,6 @@
 package com.example.jmcbackend.store.dto;
 
+import com.example.jmcbackend.regionFilter._enum.CityEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class StoreInfoParam {
     private Long storeReviewCount;
 
     private Long categoryId;
+    private CityEnum regionCode;
 
     private String phone;
     private String address;

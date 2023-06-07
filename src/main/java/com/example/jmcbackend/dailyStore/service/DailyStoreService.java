@@ -25,6 +25,7 @@ public class DailyStoreService {
     private final StoreLikesRepository storeLikesRepository;
     private final StoreRepository storeRepository;
 
+//    리뷰와 좋아요 개수를 기준으로 상위 5개의 가게(Store)를 반환합니다.
 //    @Scheduled(cron = "0 0 0 * * *") // 매일 자정 실행되도록 설정
     public List<DailyStoreDto> generateDailyStores(Pageable pageable) {
         // 기존 추천 음식점 데이터 삭제

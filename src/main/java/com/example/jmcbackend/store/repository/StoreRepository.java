@@ -1,5 +1,7 @@
 package com.example.jmcbackend.store.repository;
 
+import com.example.jmcbackend.regionFilter._enum.CityEnum;
+import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreSimpleListRes;
 import com.example.jmcbackend.store.entity.Store;
 import org.springframework.data.domain.Page;
@@ -23,9 +25,10 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findByUserId(String userId);
 
-    List<StoreSimpleListRes> findAllByRegionCode(String regionCode);
+    Page<Store> findAllByRegionCode(CityEnum regionCode, Pageable pageable);
 
 
+    // 리뷰와 좋아요 개수를 기준으로 상위 5개의 가게(Store)를 반환합니다.
     @Query("SELECT s " +
             "FROM Store s " +
             "LEFT JOIN Review r ON s.storeId = r.storeId " +

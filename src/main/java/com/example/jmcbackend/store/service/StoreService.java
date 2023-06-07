@@ -1,5 +1,6 @@
 package com.example.jmcbackend.store.service;
 import com.example.jmcbackend.member.dto.StoreEditDto;
+import com.example.jmcbackend.regionFilter._enum.CityEnum;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
 import com.example.jmcbackend.store.dto.StoreSimpleListRes;
@@ -31,6 +32,8 @@ public interface StoreService {
 
     Page<StoreDto> getAllStore (Pageable pageable);
 
+
+
     /**
      * 가게 관련 정보
      */
@@ -47,10 +50,15 @@ public interface StoreService {
 
     List<Store> getCategoryStoreList(Long categoryId);
 
+//    /**
+//     * 리전 카테고리 리스트
+//     */
+//    List<StoreSimpleListRes> getRegionStoreList(String regionCode);
+
     /**
-     * 리전 카테고리 리스트
+     *  리전 카테고리 리스트 (시영)
      */
-    List<StoreSimpleListRes> getRegionStoreList(String regionCode);
+    Page<StoreDto> getRegionStoreList2(CityEnum regionCode, Pageable pageable);
 
     /**
      * 가게 검색 기능
