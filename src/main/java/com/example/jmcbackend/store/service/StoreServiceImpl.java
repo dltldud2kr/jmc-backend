@@ -44,6 +44,8 @@ public class StoreServiceImpl implements StoreService {
                     throw new IllegalStateException("존재하는 가게 명입니다.");
                 });
 
+        log.info(String.valueOf("리전코드정보: " + parameter.getRegionCode()));
+
         Store store = Store.builder()
                     .storeName(parameter.getStoreName())
                     .userId(userId)
@@ -51,7 +53,7 @@ public class StoreServiceImpl implements StoreService {
                     .openTime(parameter.getOpenTime())
                     .categoryId(parameter.getCategoryId())
                     .address(parameter.getAddress())
-                .regionCode(parameter.getRegionCode())
+                    .regionCode(parameter.getRegionCode())
                     .url(parameter.getUrl())
                     .phone(parameter.getPhone())
                     .storeCreated(LocalDateTime.now())
@@ -85,15 +87,6 @@ public class StoreServiceImpl implements StoreService {
         return new PageImpl<>(storeDtoList, pageable, storePage.getTotalElements());
     }
 
-//    @Override
-//    public List<StoreDto> getAllStore() {
-//
-//        List<Store> storePage= storeRepository.findAll();
-//        List<StoreDto> storeDtoList = of(storePage);
-//
-//        return storeDtoList;
-//    }
-//
 
 
     @Override
@@ -142,43 +135,22 @@ public class StoreServiceImpl implements StoreService {
         return storeRepository.findAllByCategoryId(categoryId);
     }
 
-    /*
-    @Override
-    public List<StoreSimpleListRes> getRegionStoreList(String regionCode) {
-        if(regionCode.equals("all")) {
-            List<Store> storeList = storeRepository.findAll();
-            List<StoreSimpleListRes> simpleStoreList = new ArrayList<>();
-
-
-            for (Store store : storeList) {
-
-                StoreSimpleListRes dto = new StoreSimpleListRes();
-                dto.fromEntity(store);
-                simpleStoreList.add(dto);
-
-            }
-
-            return simpleStoreList;
-
-
-//            return storeList;
-//            return storeRepository.findAll();
-        } else {
-            return storeRepository.findAllByRegionCode(regionCode);
-        }
-    }
-
-     */
 
     @Override
-    public Page<StoreDto> getRegionStoreList2(CityEnum regionCode, Pageable pageable) {
-        if (regionCode.equals("all")) {
+    public Page<StoreDto> getRegionStoreList(String regionCode, Pageable pageable) {
+        CityEnum cityEnum = CityEnum.fromCode(regionCode);  // String 으로 받은 regionCode 값을 CityEnum 으로 변환 후
+                                                            // 비어있거나, 일치하는 값이 없을 시 null 값을 반환.
+
+
+        // 비어있거나 일치하는 값이 없을 시에는 전체 리스트를 불러오게 해둠
+        if (regionCode.equalsIgnoreCase("all") ||  cityEnum == null) {
             Page<Store> regionAllStore = storeRepository.findAll(pageable);
             List<StoreDto> allStoreDtoList = of(regionAllStore.getContent());
 
             return new PageImpl<>(allStoreDtoList, pageable, regionAllStore.getTotalElements());
+
         } else {
-            Page<Store> regionFilterStore = storeRepository.findAllByRegionCode(regionCode , pageable);
+            Page<Store> regionFilterStore = storeRepository.findAllByRegionCode(CityEnum.valueOf(regionCode), pageable);
             List<StoreDto> regionStoreDtoList = of(regionFilterStore.getContent());
 
             return new PageImpl<>(regionStoreDtoList, pageable, regionFilterStore.getTotalElements());

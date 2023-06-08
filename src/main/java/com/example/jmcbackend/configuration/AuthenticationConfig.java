@@ -33,9 +33,10 @@ public class AuthenticationConfig {
                 .antMatchers("/api/v1/users/join", "/api/v1/users/login").permitAll()
                 .antMatchers("/category/list").permitAll()  // 카테고리 목록
                 .antMatchers(HttpMethod.GET,"/store/list").permitAll()  // 가게 목록
-                .antMatchers(HttpMethod.GET,"/store/region").permitAll()  // 리전별 카테고리 검색
+                .antMatchers(HttpMethod.GET,"/store/region**").permitAll()  // 리전별 카테고리 검색
                 .antMatchers("/store").permitAll()  // 메인 프론트
                 .antMatchers("/store/search**").permitAll() // 가게 검색 기능
+                .antMatchers("/store/region**").permitAll()
 
                 .anyRequest().authenticated()
 

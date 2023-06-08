@@ -50,15 +50,11 @@ public interface StoreService {
 
     List<Store> getCategoryStoreList(Long categoryId);
 
-//    /**
-//     * 리전 카테고리 리스트
-//     */
-//    List<StoreSimpleListRes> getRegionStoreList(String regionCode);
 
     /**
      *  리전 카테고리 리스트 (시영)
      */
-    Page<StoreDto> getRegionStoreList2(CityEnum regionCode, Pageable pageable);
+    Page<StoreDto> getRegionStoreList(String regionCode, Pageable pageable);
 
     /**
      * 가게 검색 기능

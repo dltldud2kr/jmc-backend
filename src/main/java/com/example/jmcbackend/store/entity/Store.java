@@ -33,7 +33,4 @@ public class Store {
     private LocalDateTime storeCreated;
     private LocalDateTime storeUpdated;
 
-
-
-
 }

@@ -28,8 +28,7 @@ public class StoreController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody StoreInfoParam parameter , Principal principal) {
-//        CityEnum regionCode = CityEnum.valueOf(parameter.getRegionCode().name());
-//        parameter.setRegionCode(regionCode);
+
             String userId = principal.getName();
             Store result = storeService.register(parameter,userId);
 
@@ -61,9 +60,8 @@ public class StoreController {
 
 
 
-
     /**
-     * 지정 카테고리 가게 목록    카테고리Controller로 옮길것
+     * 지정 카테고리 가게 목록    카테고리ㅡController로 옮길것
      */
     @GetMapping("/categoryId/{categoryId}")
     public ResponseEntity categoryStoreList(@PathVariable("categoryId") Long categoryId){
@@ -79,11 +77,9 @@ public class StoreController {
      * @return
      */
     @GetMapping("/region")
-    public ResponseEntity regionStoreList(@RequestParam(value="id",defaultValue="all") CityEnum regionCode , Pageable pageable) {
-//        List<Store> stores = storeService.getRegionStoreList(regionCode);
-////        return ResponseEntity.ok(stores);
+    public ResponseEntity regionStoreList(@RequestParam(value="id",defaultValue="all") String regionCode , Pageable pageable) {
 
-        Page<StoreDto> stores = storeService.getRegionStoreList2(regionCode,pageable);
+        Page<StoreDto> stores = storeService.getRegionStoreList(String.valueOf(regionCode),pageable);
 
         return ResponseEntity.ok(stores);
     }

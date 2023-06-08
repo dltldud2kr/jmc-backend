@@ -11,7 +11,18 @@ public enum CityEnum implements EnumMapperType {
     DAEGU_05("대구광역시","달성군"),
     GYUNGBOOK_01("경상북도","경산시"),
     GYUNGBOOK_02("경상북도","칠곡군"),
-    EMPTY("없는 지역","");
+    EMPTY("없는 지역",""),
+    ALL("전체","");
+
+
+    public static CityEnum fromCode(String code) {
+        for (CityEnum cityEnum : CityEnum.values()) {
+            if (cityEnum.getCode().equalsIgnoreCase(code)) {
+                return cityEnum;
+            }
+        }
+        return null; // 매칭되는 ENUM 상수가 없는 경우 null을 반환.
+    }
     private String regionName;
     private String subRegionName;
 
@@ -19,6 +30,7 @@ public enum CityEnum implements EnumMapperType {
         this.regionName = regionName;
         this.subRegionName = subRegionName;
     }
+
 
 
     @Override
