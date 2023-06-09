@@ -50,19 +50,7 @@ public class DailyStoreService {
             if (fetchedStore != null) {
                 DailyStore dailyStore = new DailyStore();
                 dailyStore.setStoreId(fetchedStore.getStoreId());
-                dailyStore.setStoreName(fetchedStore.getStoreName());
-                dailyStore.setStoreLikeCount(likeCount);
-                dailyStore.setStoreReviewCount(reviewCount);
-                dailyStore.setReviewAvg(reviewAvg);
-                dailyStore.setThumbnailImg(fetchedStore.getThumbnailImg());
-                dailyStore.setCategoryId(fetchedStore.getCategoryId());
-                dailyStore.setAddress(fetchedStore.getAddress());
-                dailyStore.setRegionCode(fetchedStore.getRegionCode());
-                dailyStore.setUserId(fetchedStore.getUserId());
-                dailyStore.setOpenTime(fetchedStore.getOpenTime());
-                dailyStore.setStoreCreated(fetchedStore.getStoreCreated());
-                dailyStore.setStoreUpdated(fetchedStore.getStoreUpdated());
-                dailyStore.setIntroduction(fetchedStore.getIntroduction());
+
                 dailyStores.add(dailyStore);
             }
 
