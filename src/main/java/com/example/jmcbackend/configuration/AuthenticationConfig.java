@@ -37,6 +37,7 @@ public class AuthenticationConfig {
                 .antMatchers("/store").permitAll()  // 메인 프론트
                 .antMatchers("/store/search**").permitAll() // 가게 검색 기능
                 .antMatchers("/store/region**").permitAll()
+                .antMatchers("/dailyStore").permitAll()
 
                 .anyRequest().authenticated()
 
