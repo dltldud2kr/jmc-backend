@@ -50,13 +50,13 @@ public class DailyStoreService {
                 dailyStores.add(dailyStore);
             }
 
-            DailyStoreDto dailyStoreDto = DailyStoreDto.builder()
-                    .storeName(fetchedStore.getStoreName())
-                    .reviewCount(reviewCount)
-                    .reviewAvg(reviewAvg)
-                    .likeCount(likeCount)
-                    .build();
-            dto.add(dailyStoreDto);
+//            DailyStoreDto dailyStoreDto = DailyStoreDto.builder()
+//                    .storeName(fetchedStore.getStoreName())
+//                    .reviewCount(reviewCount)
+//                    .reviewAvg(reviewAvg)
+//                    .likeCount(likeCount)
+//                    .build();
+//            dto.add(dailyStoreDto);
         });
 
         dailyStoreRepository.saveAll(dailyStores); // 일괄 저장
