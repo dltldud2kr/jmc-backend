@@ -19,9 +19,9 @@ import java.util.Map;
 public class StoreSimpleListRes {
         private Long storeId; //스토어 아이디
         private String storeName; //스토어 이름
-        private Long storeLikeCount; //좋아요 개수
-        private Long storeReviewCount; //리뷰 개수
-        private Float reviewAvg;        //리뷰 점수
+        private int storeLikeCount; //좋아요 개수
+        private int storeReviewCount; //리뷰 개수
+        private double reviewAvg;        //리뷰 점수
         private String thumbnailImg; // or store logo
         private Long categoryId; // 음식점 분류 카테고리
         private String contactNumber; //컨택트 번호
@@ -34,10 +34,24 @@ public class StoreSimpleListRes {
         private String introduction; // 간단 가게 소개
 
         //작업중
-        public StoreSimpleListRes fromEntity(Store store){
+        public StoreSimpleListRes fromEntity(Store store,long reviewCount,double reviewAvg,long likeCount){
                 return  StoreSimpleListRes.builder()
                         .storeId(store.getStoreId())
-                        .storeName(store.getStoreName()).build();
+                        .storeName(store.getStoreName())
+                        .storeReviewCount((int) reviewCount)
+                        .reviewAvg(reviewAvg)
+                        .storeLikeCount((int) likeCount)
+                        .thumbnailImg(store.getUrl())
+                        .categoryId(store.getCategoryId())
+                        .contactNumber(store.getPhone())
+                        .address(store.getAddress())
+                        .regionCode(store.getRegionCode())
+                        .ownerUserId(store.getUserId())
+                        .openTime(store.getOpenTime())
+                        .storeCreated(store.getStoreCreated())
+                        .storeUpdated(store.getStoreUpdated())
+                        .introduction(store.getIntroduction())
+                        .build();
         }
 
 

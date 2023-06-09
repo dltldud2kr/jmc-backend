@@ -7,6 +7,7 @@ import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.service.ReviewService;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
+import com.example.jmcbackend.store.dto.StoreSimpleListRes;
 import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -77,9 +78,13 @@ public class StoreController {
      * @return
      */
     @GetMapping("/region")
-    public ResponseEntity regionStoreList(@RequestParam(value="id",defaultValue="all") String regionCode , Pageable pageable) {
+    public ResponseEntity regionStoreList(
+            @RequestParam(value="code",defaultValue="all") String regionCode,
+//            @RequestParam(value="loadType") String loadingType,
+            Pageable pageable
+    ) {
 
-        Page<StoreDto> stores = storeService.getRegionStoreList(String.valueOf(regionCode),pageable);
+        List<StoreSimpleListRes> stores = storeService.getRegionStoreList(String.valueOf(regionCode), pageable);
 
         return ResponseEntity.ok(stores);
     }

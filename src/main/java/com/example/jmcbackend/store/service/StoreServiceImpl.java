@@ -135,9 +135,38 @@ public class StoreServiceImpl implements StoreService {
         return storeRepository.findAllByCategoryId(categoryId);
     }
 
-
     @Override
-    public Page<StoreDto> getRegionStoreList(String regionCode, Pageable pageable) {
+    public List<StoreSimpleListRes> getRegionStoreList(String regionCode, Pageable pageable) {
+        try{
+            Page<Store> storeList;
+
+            if(regionCode.equals("all")) {
+                storeList = storeRepository.findAll(pageable);
+            } else {
+                storeList = storeRepository.findAllByRegionCode(CityEnum.valueOf(regionCode.toString()),pageable);
+            }
+                //반활할 return DTO LIST
+                List<StoreSimpleListRes> returnDto = new ArrayList<>();
+                StoreSimpleListRes storeListDto = new StoreSimpleListRes();
+
+                for (Store store : storeList) {
+                    System.out.println("store : " + store.toString());
+                    long reviewCount = reviewRepository.countByStoreId(store.getStoreId());
+                    double reviewAvg = reviewRepository.reviewScoreAvg(store.getStoreId());
+                    long likeCount = storeLikesRepository.countByStoreId(store.getStoreId());
+
+                    returnDto.add(storeListDto.fromEntity(store,reviewCount,reviewAvg,likeCount));
+                }
+                return returnDto;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+/*
+    @Override
+    public List<StoreSimpleListRes> getRegionStoreList1(String regionCode, int count, int loadingType) {
         CityEnum cityEnum = CityEnum.fromCode(regionCode);  // String 으로 받은 regionCode 값을 CityEnum 으로 변환 후
                                                             // 비어있거나, 일치하는 값이 없을 시 null 값을 반환.
 
@@ -156,6 +185,7 @@ public class StoreServiceImpl implements StoreService {
             return new PageImpl<>(regionStoreDtoList, pageable, regionFilterStore.getTotalElements());
         }
     }
+*/
 
     @Override
     public List<Store> search(String keyword) {

@@ -54,7 +54,7 @@ public interface StoreService {
     /**
      *  리전 카테고리 리스트 (시영)
      */
-    Page<StoreDto> getRegionStoreList(String regionCode, Pageable pageable);
+    List<StoreSimpleListRes> getRegionStoreList(String regionCode, Pageable pageable);
 
     /**
      * 가게 검색 기능

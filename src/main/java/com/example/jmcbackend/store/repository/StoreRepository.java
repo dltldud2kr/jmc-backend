@@ -28,6 +28,18 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     Page<Store> findAllByRegionCode(CityEnum regionCode, Pageable pageable);
 
 
+    //리뷰 개수 순으로 스토어 불러오기
+//    @Query("SELECT s FROM Store s LEFT JOIN s.storeId r GROUP BY s.storeId ORDER BY COUNT(r) DESC")
+//    Page<Store> findAllStoreReviewCount(Pageable pageable);
+
+//    //리뷰 평점 순으로 스토어 불러오기
+//    @Query
+//    Page<Store> findAllStoreReviewCount(Pageable pageable);
+//
+//    //좋아요 개수 순으로
+//    @Query
+//    Page<Store> findAlldkdkdkd(Pageable pageable);
+
     // 리뷰와 좋아요 개수를 기준으로 상위 5개의 가게(Store)를 반환합니다.
     @Query("SELECT s " +
             "FROM Store s " +

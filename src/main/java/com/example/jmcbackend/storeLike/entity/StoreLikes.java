@@ -15,9 +15,7 @@ public class StoreLikes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String userId;
     private Long storeId;
-
     private Boolean isActive;
 }

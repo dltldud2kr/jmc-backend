@@ -34,4 +34,21 @@ public class Store {
     private LocalDateTime storeCreated;
     private LocalDateTime storeUpdated;
 
+    @Override
+    public String toString() {
+        return "Store{" +
+                "storeId=" + storeId +
+                ", storeName='" + storeName + '\'' +
+                ", categoryId=" + categoryId +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", url='" + url + '\'' +
+                ", regionCode=" + regionCode +
+                ", openTime='" + openTime + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", userId='" + userId + '\'' +
+                ", storeCreated=" + storeCreated +
+                ", storeUpdated=" + storeUpdated +
+                '}';
+    }
 }
