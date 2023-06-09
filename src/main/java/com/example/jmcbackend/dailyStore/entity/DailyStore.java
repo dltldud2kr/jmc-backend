@@ -18,7 +18,9 @@ public class DailyStore {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long storeId; //스토어 아이디
+    @OneToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 
 
 

@@ -49,7 +49,7 @@ public class DailyStoreService {
             Store fetchedStore = storeRepository.findById(store.getStoreId()).orElse(null);
             if (fetchedStore != null) {
                 DailyStore dailyStore = new DailyStore();
-                dailyStore.setStoreId(fetchedStore.getStoreId());
+                dailyStore.setStore(store);
 
                 dailyStores.add(dailyStore);
             }
