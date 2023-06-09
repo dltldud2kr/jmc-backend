@@ -24,6 +24,7 @@ public class Store {
     private String phone;
     private String address;
     private String url;
+    private String thumbnailImg;
     @Column
     @Enumerated(EnumType.STRING)
     private CityEnum regionCode;

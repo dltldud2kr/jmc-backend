@@ -17,10 +17,12 @@ public class DailyStoreController {
     private final DailyStoreService dailyStoreService;
 
     @GetMapping
-    public List<DailyStoreDto> top5(Pageable pageable) {
+    public List<DailyStoreDto> top5(@RequestParam(value="count", defaultValue = "5") String countStr, Pageable pageable) {
 
-        List<DailyStoreDto> list = dailyStoreService.generateDailyStores(pageable);
+        // defaultValue 값으로 받은 "5" 를 int 타입으로 변환
+        int count = Integer.parseInt(countStr);
 
+        List<DailyStoreDto> list = dailyStoreService.generateDailyStores(count,pageable);
 
         return list;
     }

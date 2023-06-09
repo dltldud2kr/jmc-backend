@@ -8,6 +8,7 @@ import com.example.jmcbackend.store.entity.Store;
 import com.example.jmcbackend.store.repository.StoreRepository;
 import com.example.jmcbackend.storeLike.repository.StoreLikesRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DailyStoreService {
 
     private final DailyStoreRepository dailyStoreRepository;
@@ -25,14 +27,16 @@ public class DailyStoreService {
     private final StoreLikesRepository storeLikesRepository;
     private final StoreRepository storeRepository;
 
-//    리뷰와 좋아요 개수를 기준으로 상위 5개의 가게(Store)를 반환합니다.
+//    리뷰와 좋아요 개수를 기준으로 지정 count 수대로 가게(Store)를 반환합니다.
 //    @Scheduled(cron = "0 0 0 * * *") // 매일 자정 실행되도록 설정
-    public List<DailyStoreDto> generateDailyStores(Pageable pageable) {
+    public List<DailyStoreDto> generateDailyStores(int count, Pageable pageable) {
         // 기존 추천 음식점 데이터 삭제
         dailyStoreRepository.deleteAll();
 
+        log.info(String.valueOf(count));
+
         // 새로운 추천 음식점 생성 및 저장 로직 구현  -> storeRepository @Query 참고
-        Page<Store> result = storeRepository.findTop5StoresWithReviewAndLikeCounts(PageRequest.of(0,5));
+        Page<Store> result = storeRepository.findTop5StoresWithReviewAndLikeCounts(PageRequest.of(0,count));
         List<DailyStore> dailyStores = new ArrayList<>();
         List<DailyStoreDto> dto = new ArrayList<>();
 
@@ -45,18 +49,40 @@ public class DailyStoreService {
             Store fetchedStore = storeRepository.findById(store.getStoreId()).orElse(null);
             if (fetchedStore != null) {
                 DailyStore dailyStore = new DailyStore();
+                dailyStore.setStoreId(fetchedStore.getStoreId());
                 dailyStore.setStoreName(fetchedStore.getStoreName());
-                dailyStore.setStore(fetchedStore);
+                dailyStore.setStoreLikeCount(likeCount);
+                dailyStore.setStoreReviewCount(reviewCount);
+                dailyStore.setReviewAvg(reviewAvg);
+                dailyStore.setThumbnailImg(fetchedStore.getThumbnailImg());
+                dailyStore.setCategoryId(fetchedStore.getCategoryId());
+                dailyStore.setAddress(fetchedStore.getAddress());
+                dailyStore.setRegionCode(fetchedStore.getRegionCode());
+                dailyStore.setUserId(fetchedStore.getUserId());
+                dailyStore.setOpenTime(fetchedStore.getOpenTime());
+                dailyStore.setStoreCreated(fetchedStore.getStoreCreated());
+                dailyStore.setStoreUpdated(fetchedStore.getStoreUpdated());
+                dailyStore.setIntroduction(fetchedStore.getIntroduction());
                 dailyStores.add(dailyStore);
             }
 
-//            DailyStoreDto dailyStoreDto = DailyStoreDto.builder()
-//                    .storeName(fetchedStore.getStoreName())
-//                    .reviewCount(reviewCount)
-//                    .reviewAvg(reviewAvg)
-//                    .likeCount(likeCount)
-//                    .build();
-//            dto.add(dailyStoreDto);
+            DailyStoreDto dailyStoreDto = DailyStoreDto.builder()
+                    .storeId(fetchedStore.getStoreId())
+                    .storeName(fetchedStore.getStoreName())
+                    .storeReviewCount(reviewCount)
+                    .reviewAvg(reviewAvg)
+                    .storeLikeCount(likeCount)
+                    .categoryId(fetchedStore.getCategoryId())
+                    .address(fetchedStore.getAddress())
+                    .userId(fetchedStore.getUserId())
+                    .openTime(fetchedStore.getOpenTime())
+                    .storeCreated(fetchedStore.getStoreCreated())
+                    .storeUpdated(fetchedStore.getStoreUpdated())
+                    .introduction(fetchedStore.getIntroduction())
+                    .regionCode(fetchedStore.getRegionCode())
+                    .thumbnailImg(fetchedStore.getThumbnailImg())
+                    .build();
+            dto.add(dailyStoreDto);
         });
 
         dailyStoreRepository.saveAll(dailyStores); // 일괄 저장
