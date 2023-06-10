@@ -6,8 +6,7 @@ import com.example.jmcbackend.member.dto.UserJoinRequest;
 import com.example.jmcbackend.member.dto.UserListResponse;
 import com.example.jmcbackend.member.dto.UserLoginResponse;
 import com.example.jmcbackend.member.service.UserService;
-import com.example.jmcbackend.member.service.UserServiceImpl;
-import com.example.jmcbackend.review.dto.ReviewDto;
+import com.example.jmcbackend.review.dto.MyReviewListDto;
 import com.example.jmcbackend.review.service.ReviewService;
 import com.example.jmcbackend.storeLike.dto.StoreLikesDto;
 import com.example.jmcbackend.storeLike.service.StoreLikesService;
@@ -17,13 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
@@ -118,7 +113,7 @@ public class UserController {
     public ResponseEntity myReviewList(Principal principal, Pageable pageable) {
         String userId = principal.getName();
 
-        Page<ReviewDto> reviews = reviewService.myReviewList(userId, pageable);
+        Page<MyReviewListDto> reviews = reviewService.myReviewList(userId, pageable);
 
         return ResponseEntity.ok(reviews);
     }

@@ -39,8 +39,8 @@ public class RestaurantFinderController {
         Page<StoreDto> allStore = storeService.getAllStore(pageable);
 
         Page<MainDto> mainDtos = allStore.map(store ->{
-            Long reviewCount = reviewRepository.countByStoreId(store.getStoreId());
-            Float reviewAvg = reviewRepository.reviewScoreAvg(store.getStoreId());
+//            Long reviewCount = reviewRepository.countByStore(store);
+//            Float reviewAvg = reviewRepository.reviewScoreAvg(store.getStoreId());
             Long likeCount = storeLikesRepository.countByStoreId(store.getStoreId());
 
             return MainDto.builder()
@@ -57,8 +57,8 @@ public class RestaurantFinderController {
                     .storeCreated(store.getStoreCreated())
                     .storeUpdated(store.getStoreUpdated())
                     .storeLikeCount(likeCount)
-                    .reviewAvg(reviewAvg)
-                    .storeReviewCount(reviewCount)
+//                    .reviewAvg(reviewAvg)
+//                    .storeReviewCount(reviewCount)
                     .build();
         });
 

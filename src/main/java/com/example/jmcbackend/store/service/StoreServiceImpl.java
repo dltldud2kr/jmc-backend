@@ -3,6 +3,8 @@ package com.example.jmcbackend.store.service;
 import com.example.jmcbackend.exception.AppException;
 import com.example.jmcbackend.exception.ErrorCode;
 import com.example.jmcbackend.member.dto.StoreEditDto;
+import com.example.jmcbackend.member.entity.User;
+import com.example.jmcbackend.member.repository.UserRepository;
 import com.example.jmcbackend.regionFilter._enum.CityEnum;
 import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.store.dto.StoreDto;
@@ -30,6 +32,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class StoreServiceImpl implements StoreService {
+    private final UserRepository userRepository;
 
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
@@ -43,6 +46,8 @@ public class StoreServiceImpl implements StoreService {
                 .ifPresent(store -> {
                     throw new IllegalStateException("존재하는 가게 명입니다.");
                 });
+
+//        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User not found"));
 
         log.info(String.valueOf("리전코드정보: " + parameter.getRegionCode()));
 
@@ -69,9 +74,7 @@ public class StoreServiceImpl implements StoreService {
         Optional<Store> store = storeRepository.findById(storeId);
 
         if (store.isPresent() && store.get().getUserId().equals(userId)) {
-            store.ifPresent(storeRepository::delete);
-
-
+            storeRepository.deleteById(storeId);
             return ResponseEntity.ok().body("삭제완료");
         } else {
             throw new IllegalStateException("가게 삭제 오류");
@@ -95,11 +98,11 @@ public class StoreServiceImpl implements StoreService {
         Store storeInfo = storeRepository.findById(storeId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 가게입니다."));
 
-        Long reviewCount = reviewRepository.countByStoreId(storeId);
         Long likeCount = storeLikesRepository.countByStoreId(storeId);
+        Long reviewCount = reviewRepository.countByStore(storeInfo);
 
         //리뷰점수 소수점 첫째자리까지
-        Float reviewAvg = reviewRepository.reviewScoreAvg(storeId);
+        Float reviewAvg = reviewRepository.reviewScoreAvg(storeInfo);
 
             StoreDto dto = StoreDto.builder()
                 .storeId(storeInfo.getStoreId())
@@ -108,10 +111,11 @@ public class StoreServiceImpl implements StoreService {
                 .storeName(storeInfo.getStoreName())
                 .address(storeInfo.getAddress())
                 .url(storeInfo.getUrl())
+//                .storeReviewCount((long) storeInfo.getReviews().size())   // 리뷰 개수가 많을 경우 성능 이슈
                 .storeReviewCount(reviewCount)
                 .storeLikeCount(likeCount)
-                    .reviewAvg(reviewAvg)
-                    .regionCode(storeInfo.getRegionCode())
+                .reviewAvg(reviewAvg)
+                .regionCode(storeInfo.getRegionCode())
                 .contactNumber(storeInfo.getPhone())
                 .openTime(storeInfo.getOpenTime())
                 .build();
@@ -151,8 +155,8 @@ public class StoreServiceImpl implements StoreService {
 
                 for (Store store : storeList) {
                     System.out.println("store : " + store.toString());
-                    long reviewCount = reviewRepository.countByStoreId(store.getStoreId());
-                    double reviewAvg = reviewRepository.reviewScoreAvg(store.getStoreId());
+                    long reviewCount = reviewRepository.countByStore(store);
+                    Float reviewAvg = reviewRepository.reviewScoreAvg(store);
                     long likeCount = storeLikesRepository.countByStoreId(store.getStoreId());
 
                     returnDto.add(storeListDto.fromEntity(store,reviewCount,reviewAvg,likeCount));
@@ -241,9 +245,9 @@ public class StoreServiceImpl implements StoreService {
 
     public  StoreDto of(Store store){
 
-        Long reviewCount = reviewRepository.countByStoreId(store.getStoreId());
+        Long reviewCount = reviewRepository.countByStore(store);
         Long likeCount = storeLikesRepository.countByStoreId(store.getStoreId());
-        Float reviewAvg = reviewRepository.reviewScoreAvg(store.getStoreId());
+        Float reviewAvg = reviewRepository.reviewScoreAvg(store);
 
 
         return StoreDto.builder()

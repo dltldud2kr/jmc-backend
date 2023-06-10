@@ -2,7 +2,9 @@ package com.example.jmcbackend.review.service;
 
 import com.example.jmcbackend.exception.AppException;
 import com.example.jmcbackend.exception.ErrorCode;
-import com.example.jmcbackend.review.dto.ReviewDto;
+import com.example.jmcbackend.member.entity.User;
+import com.example.jmcbackend.member.repository.UserRepository;
+import com.example.jmcbackend.review.dto.*;
 import com.example.jmcbackend.review.entity.Review;
 import com.example.jmcbackend.review.repository.ReviewRepository;
 import com.example.jmcbackend.store.entity.Store;
@@ -14,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -24,27 +24,37 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public Review add(ReviewDto dto , String userId, Long storeId) {
+    public ReviewCreateResDto add(ReviewCreateReqDto dto , String userId, Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("Store not found"));
-
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
         if (store.getUserId().equals(userId)){
             throw new IllegalArgumentException("User does not have permission to add a review for this store");
         }
 
         Review review = Review.builder()
-                .userId(userId)
-                .storeId(storeId)
+                .user(user)
+                .store(store)
                 .reviewScore(dto.getReviewScore())
-                .storeName(store.getStoreName())
                 .reviewText(dto.getReviewText())
+                .reviewImg(dto.getReviewImg())
                 .reviewCreated(LocalDateTime.now())
                 .build();
 
         reviewRepository.save(review);
 
-        return review;
+        ReviewCreateResDto reviewCreateResDto = ReviewCreateResDto.builder()
+                .reviewId(review.getReviewId())
+                .reviewScore(review.getReviewScore())
+                .reviewImg(review.getReviewImg())
+                .reviewText(review.getReviewText())
+                .storeId(review.getStore().getStoreId())
+                .build();
+
+
+        return reviewCreateResDto;
     }
 
 
@@ -55,28 +65,38 @@ public class ReviewServiceImpl implements ReviewService{
             throw new IllegalStateException("게시글이 존재하지 않습니다.");
         }
 
-        if(optionalReview.get().getUserId().equals(userId)) {
+        Review review = optionalReview.get();
+        User user = review.getUser();
+
+        if(user == null) {
+            throw new IllegalStateException("게시글 작성자 정보가 없습니다.");
+        }
+        if (user.getUserId().equals(userId)) {
             reviewRepository.deleteById(reviewId);
         } else {
             throw new IllegalStateException("자신의 게시글이 아닙니다.");
+
         }
 
         return ResponseEntity.ok().body("삭제완료");
     }
 
     @Override
-    public ResponseEntity modify(String userId, Long reviewId, ReviewDto dto) {
+    public ResponseEntity update(String userId, Long reviewId, ReviewUpdateDto dto) {
 
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new NoSuchElementException("Cannot find store with reviewId" + reviewId));
+                .orElseThrow(() -> new IllegalStateException("Cannot find store with reviewId" + reviewId));
 
-        if(!review.getUserId().equals(userId)){
+        User user = review.getUser();
+        if(!user.getUserId().equals(userId)){
             throw new AppException(ErrorCode.UN_AUTHORIZED,"You do not have permission to modify this review.");
         }
 
         review.setReviewScore(dto.getReviewScore());
         review.setReviewText(dto.getReviewText());
-//        review.setReviewUpdated(LocalDateTime.now());
+        review.setReviewImg(dto.getReviewImg());
+        review.setReviewCreated(review.getReviewCreated());
+        review.setReviewUpdated(LocalDateTime.now());
 
         reviewRepository.save(review);
 
@@ -85,20 +105,20 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public Page<ReviewDto> myReviewList(String userId, Pageable pageable) {
+    public Page<MyReviewListDto> myReviewList(String userId, Pageable pageable) {
 
-        Page<Review> review = reviewRepository.findAllByUserId(userId, pageable);
-        Page<ReviewDto> reviewDtoPage = review.map(ReviewDto::of);
+        Page<Review> review = reviewRepository.findAllByUserUserId(userId, pageable);
+        Page<MyReviewListDto> reviewDtoPage = review.map(MyReviewListDto::of);
         return reviewDtoPage;
     }
 
     @Override
-    public Page<ReviewDto> storeReviewList(Long storeId, Pageable pageable) {
+    public Page<StoreReviewListDto> storeReviewList(Long storeId, Pageable pageable) {
 
-        Page<Review> review = reviewRepository.findAllByStoreId(storeId, pageable);
-        Page<ReviewDto> storeReviewList = review.map(ReviewDto::of);
+        Page<Review> review = reviewRepository.findAllByStoreStoreId(storeId, pageable);
+        Page<StoreReviewListDto> reviewDtoPage = review.map(StoreReviewListDto::of);
 
-        return storeReviewList;
+        return reviewDtoPage;
     }
 
 

@@ -1,7 +1,7 @@
 package com.example.jmcbackend.member.controller;
 
 import com.example.jmcbackend.member.dto.MypageDto;
-import com.example.jmcbackend.review.dto.ReviewDto;
+import com.example.jmcbackend.review.dto.MyReviewListDto;
 import com.example.jmcbackend.review.service.ReviewService;
 import com.example.jmcbackend.storeLike.dto.StoreLikesDto;
 import com.example.jmcbackend.storeLike.service.StoreLikesService;
@@ -27,7 +27,7 @@ public class MyPageController {
     public ResponseEntity getMyPage(Principal principal, Pageable pageable){
         String userId = principal.getName();
 
-        Page<ReviewDto> reviewList = reviewService.myReviewList(userId,pageable);   // 내 리뷰 작성 리스트
+        Page<MyReviewListDto> reviewList = reviewService.myReviewList(userId,pageable);   // 내 리뷰 작성 리스트
         Page<StoreLikesDto> storeLikeList = storeLikesService.myLikeList(userId, pageable); // 내 좋아요 가게 리스트
 
         MypageDto mypageDto = new MypageDto();

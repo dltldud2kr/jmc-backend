@@ -43,7 +43,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     // 리뷰와 좋아요 개수를 기준으로 상위 5개의 가게(Store)를 반환합니다.
     @Query("SELECT s " +
             "FROM Store s " +
-            "LEFT JOIN Review r ON s.storeId = r.storeId " +
+            "LEFT JOIN Review r ON s.storeId = r.store.storeId " +
             "LEFT JOIN StoreLikes sl ON s.storeId = sl.storeId " +
             "GROUP BY s.storeId " +
             "ORDER BY (COUNT(r.reviewId) + COUNT(sl.id)) DESC")

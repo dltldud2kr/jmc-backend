@@ -1,9 +1,8 @@
 package com.example.jmcbackend.store.controller;
 
 import com.example.jmcbackend.member.dto.StoreEditDto;
-import com.example.jmcbackend.regionFilter._enum.CityEnum;
-import com.example.jmcbackend.review.dto.ReviewDto;
-import com.example.jmcbackend.review.entity.Review;
+import com.example.jmcbackend.review.dto.MyReviewListDto;
+import com.example.jmcbackend.review.dto.StoreReviewListDto;
 import com.example.jmcbackend.review.service.ReviewService;
 import com.example.jmcbackend.store.dto.StoreDto;
 import com.example.jmcbackend.store.dto.StoreInfoParam;
@@ -110,7 +109,7 @@ public class StoreController {
     @GetMapping("/{storeId}/reviewList")
     public ResponseEntity storeReviewList(@PathVariable("storeId") Long storeId, Pageable pageable) {
 
-        Page<ReviewDto> reviews = reviewService.storeReviewList(storeId, pageable);
+        Page<StoreReviewListDto> reviews = reviewService.storeReviewList(storeId, pageable);
 
         return ResponseEntity.ok(reviews);
     }

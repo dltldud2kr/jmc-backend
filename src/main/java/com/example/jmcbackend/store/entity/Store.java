@@ -1,10 +1,12 @@
 package com.example.jmcbackend.store.entity;
 
 import com.example.jmcbackend.regionFilter._enum.CityEnum;
+import com.example.jmcbackend.review.entity.Review;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,7 +20,6 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeId;
-
     private String storeName;
     private Long categoryId;
     private String phone;
@@ -33,6 +34,11 @@ public class Store {
     private String userId;
     private LocalDateTime storeCreated;
     private LocalDateTime storeUpdated;
+
+    @OneToMany(mappedBy = "store")
+    List<Review> reviews = new ArrayList<>();
+
+
 
     @Override
     public String toString() {

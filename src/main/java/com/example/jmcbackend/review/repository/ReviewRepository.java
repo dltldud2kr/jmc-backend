@@ -1,5 +1,6 @@
 package com.example.jmcbackend.review.repository;
 
+import com.example.jmcbackend.store.entity.Store;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,11 +14,11 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    Long countByStoreId(Long storeId);
+    Long countByStore(Store store);
 
-    Page<Review> findAllByUserId(String userId, Pageable pageable);
+    Page<Review> findAllByUserUserId(String userId, Pageable pageable);
 
-    Page<Review> findAllByStoreId(Long userId, Pageable pageable);
+    Page<Review> findAllByStoreStoreId(Long storeId, Pageable pageable);
 
 
 
@@ -25,6 +26,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     /**
      * 소수 첫째자리 까지 리뷰 평균 , null값일시 0 반환
      */
-    @Query(value = "select COALESCE(ROUND(AVG(r.reviewScore), 1), 0) from Review r where r.storeId = :storename ")
-    Float reviewScoreAvg(@Param("storename") Long storeId);
+    @Query(value = "SELECT COALESCE(ROUND(AVG(r.reviewScore), 1), 0) FROM Review r WHERE r.store = :store")
+    Float reviewScoreAvg(@Param("store") Store store);
+
 }

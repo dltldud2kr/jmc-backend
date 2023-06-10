@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService{
         user.setUserName(dto.getUserName());
         user.setNickname(dto.getNickname());
         user.setPassword(encoder.encode(dto.getPassword()));
-//        user.setUdtDt(LocalDateTime.now());
+        user.setUdtDt(LocalDateTime.now());
 
         userRepository.save(user);
 

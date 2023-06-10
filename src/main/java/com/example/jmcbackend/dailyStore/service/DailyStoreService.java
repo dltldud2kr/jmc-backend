@@ -41,8 +41,8 @@ public class DailyStoreService {
         List<DailyStoreDto> dto = new ArrayList<>();
 
         result.getContent().forEach(store -> {
-            Long reviewCount = reviewRepository.countByStoreId(store.getStoreId());
-            Float reviewAvg = reviewRepository.reviewScoreAvg(store.getStoreId());
+            Long reviewCount = reviewRepository.countByStore(store);
+            Float reviewAvg = reviewRepository.reviewScoreAvg(store);
             Long likeCount = storeLikesRepository.countByStoreId(store.getStoreId());
 
             // Store 엔티티를 조회하여 설정
