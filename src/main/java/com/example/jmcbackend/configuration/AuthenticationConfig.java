@@ -39,6 +39,7 @@ public class AuthenticationConfig {
                 .antMatchers("/store/region**").permitAll()
                 .antMatchers("/store/region").permitAll()
                 .antMatchers("/dailyStore").permitAll()
+                .antMatchers("/image**").permitAll()
 
                 //s3 upload test
                 .antMatchers("/s3/upload").permitAll()

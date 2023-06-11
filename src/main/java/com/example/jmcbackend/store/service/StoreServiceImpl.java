@@ -61,6 +61,7 @@ public class StoreServiceImpl implements StoreService {
                     .regionCode(parameter.getRegionCode())
                     .url(parameter.getUrl())
                     .phone(parameter.getPhone())
+                    .thumbnailImg(parameter.getThumbnailImg())
                     .storeCreated(LocalDateTime.now())
                     .build();
 
@@ -260,6 +261,7 @@ public class StoreServiceImpl implements StoreService {
                 .address(store.getAddress())
                 .storeReviewCount(reviewCount)
                 .storeLikeCount(likeCount)
+                .thumbnailImg(store.getThumbnailImg())
                 .reviewAvg(reviewAvg)
                 .storeUpdated(store.getStoreUpdated())
                 .storeCreated(store.getStoreCreated())

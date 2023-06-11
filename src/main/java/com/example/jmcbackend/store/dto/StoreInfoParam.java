@@ -25,6 +25,7 @@ public class StoreInfoParam {
     private String phone;
     private String address;
     private String url;
+    private String thumbnailImg;
 
     private String openTime;    //
     private String introduction;
