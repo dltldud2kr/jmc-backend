@@ -41,7 +41,7 @@ public class StoreSimpleListRes {
                         .storeReviewCount((int) reviewCount)
                         .reviewAvg(reviewAvg)
                         .storeLikeCount((int) likeCount)
-                        .thumbnailImg(store.getUrl())
+                        .thumbnailImg(store.getThumbnailImg())
                         .categoryId(store.getCategoryId())
                         .contactNumber(store.getPhone())
                         .address(store.getAddress())
